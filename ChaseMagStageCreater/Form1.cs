@@ -42,11 +42,11 @@ namespace ChaseMagStageCreater
 
             // ピクセルから大きさを計算するためのデータ
             categoryImageDatas = new Dictionary<StagePartsCategory, ImageData>();
-            categoryImageDatas.Add(StagePartsCategory.Scaffold, new ImageData( new Vector2(8,4),Properties.Resources.scaffold));
-            categoryImageDatas.Add(StagePartsCategory.Wall, new ImageData( new Vector2(1,20),Properties.Resources.wallNorth,Properties.Resources.wallSouth ));
-            categoryImageDatas.Add(StagePartsCategory.NormalWall, new ImageData( new Vector2(4,30), Properties.Resources.floor));
-            categoryImageDatas.Add(StagePartsCategory.JumpRamp, new ImageData( new Vector2(4,2.5f), Properties.Resources.jumpRampNorth,Properties.Resources.jumpRampSouth));
-            categoryImageDatas.Add(StagePartsCategory.ItemBox, new ImageData(new Vector2(4,2.5f), Properties.Resources.itemBox));
+            categoryImageDatas.Add(StagePartsCategory.Scaffold, new ImageData( new Vector2(8,4),Properties.Resources.scaffold,BasePoint.Top));
+            categoryImageDatas.Add(StagePartsCategory.Wall, new ImageData( new Vector2(1,20),Properties.Resources.wallNorth,Properties.Resources.wallSouth ,BasePoint.Bottom));
+            categoryImageDatas.Add(StagePartsCategory.NormalWall, new ImageData( new Vector2(4,30), Properties.Resources.floor, BasePoint.Bottom));
+            categoryImageDatas.Add(StagePartsCategory.JumpRamp, new ImageData( new Vector2(4,2.5f), Properties.Resources.jumpRampNorth,Properties.Resources.jumpRampSouth,BasePoint.Bottom));
+            categoryImageDatas.Add(StagePartsCategory.ItemBox, new ImageData(new Vector2(4,2.5f), Properties.Resources.itemBox,BasePoint.Bottom));
 
 
 
@@ -82,9 +82,20 @@ namespace ChaseMagStageCreater
 
             stageData = data;
 
+            foreach (var item in pictures)
+            {
+                item.Dispose();
+            }
+            pictures.Clear();
+
             msgText.Text = filePath + "読み込みました";
             nowOpenPath = filePath;
             this.Text += nowOpenPath;
+            for (int i = 0; i < stageData.stageParts.Count; i++)
+            {
+                AddStagePartsImage(stageData.stageParts[i]);
+
+            }
 
             // 描画の更新処理
             ViewDataClear();
@@ -309,8 +320,11 @@ namespace ChaseMagStageCreater
             size = new Size((int)Math.Round(categoryImageDatas[part.category].scale.x * pixelMagnification * size.Width * stageSizeMagnification),
                 (int)Math.Round(categoryImageDatas[part.category].scale.y * pixelMagnification * size.Height * stageSizeMagnification));
             Point location = pictureBox1.Location;
+
             location.Offset((int)Math.Round(pictureBox1.Size.Width / 2.0f), pictureBox1.Size.Height);
-            location.Offset(StagePositionToLocation(new Vector2(0.0f,0.0f), size));
+
+            Vector2 position = new Vector2(part.position.x * stageSizeMagnification, -part.position.y * stageSizeMagnification);
+            location.Offset(StagePositionToLocation(position, size, categoryImageDatas[part.category].basePoint));
             pictures[pictures.Count - 1].Location = location;
             pictures[pictures.Count - 1].Size = size;
             pictures[pictures.Count - 1].BackgroundImage = categoryImageDatas[part.category].bitmap[0];
@@ -358,9 +372,25 @@ namespace ChaseMagStageCreater
             saveFileDialog1.ShowDialog();
         }
 
-        private Point StagePositionToLocation(Vector2 pos, Size size)
+        private Point StagePositionToLocation(Vector2 pos, Size size, BasePoint basePoint)
         {
-            PointF pointf = new PointF(pos.x - size.Width / 2.0f, pos.y - size.Height /2.0f);
+            PointF delta = Point.Empty;
+            switch (basePoint)
+            {
+                case BasePoint.Top:
+                    delta = new PointF(-size.Width / 2.0f, 0.0f);
+
+                    break;
+                case BasePoint.Center:
+                    delta = new PointF(-size.Width / 2.0f, -size.Height / 2.0f);
+                    break;
+                case BasePoint.Bottom:
+                    delta = new PointF(-size.Width / 2.0f, -size.Height);
+                    break;
+
+            }
+
+            PointF pointf = new PointF(pos.x + delta.X, pos.y + delta.Y);
             return Point.Round(pointf);
         }
 
@@ -371,11 +401,16 @@ namespace ChaseMagStageCreater
                 return;
             }
             Point location = pictureBox1.Location;
+            // 原点へ
             location.Offset((int)Math.Round(pictureBox1.Size.Width / 2.0f), pictureBox1.Size.Height);
-            location.Offset(StagePositionToLocation(new Vector2( (float)positionX.Value*stageSizeMagnification,(float)-positionY.Value * stageSizeMagnification), pictures[partsListBox.SelectedIndex].Size));
+            Vector2 pos = new Vector2((float)positionX.Value * stageSizeMagnification,
+                (float)-positionY.Value * stageSizeMagnification);
+            BasePoint basePoint = categoryImageDatas[stageData.stageParts[partsListBox.SelectedIndex].category].basePoint;
+            location.Offset(StagePositionToLocation(pos, pictures[partsListBox.SelectedIndex].Size, basePoint));
             pictures[partsListBox.SelectedIndex].Location = location;
 
         }
+
     }
 
 
