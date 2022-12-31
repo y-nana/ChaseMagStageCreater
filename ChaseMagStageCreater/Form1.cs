@@ -30,6 +30,8 @@ namespace ChaseMagStageCreater
 
         private float stageSizeMagnification;
 
+        private int dragPictureIndex;
+
         private readonly float pixelMagnification = 0.01f;
 
         public Form1()
@@ -62,6 +64,7 @@ namespace ChaseMagStageCreater
             stageData.height = 20.0f;
             stageSizeMagnification = pictureBox1.Size.Width / stageData.width;
             preIndex = -1;
+            dragPictureIndex = -1;
             nowOpenPath = string.Empty;
             ViewUpdate();
         }
@@ -332,8 +335,13 @@ namespace ChaseMagStageCreater
             pictures[pictures.Count - 1].BackgroundImage = categoryImageDatas[part.category].bitmap[0];
             pictures[pictures.Count - 1].BackgroundImageLayout = ImageLayout.Stretch;
             pictures[pictures.Count - 1].BringToFront();
+            pictures[pictures.Count - 1].MouseDown += StagePartMouseDown;
+            pictures[pictures.Count - 1].MouseUp += StagePartMouseUp;
+            pictures[pictures.Count - 1].MouseMove += StagePartMouseMove;
 
             msgText.Text = size.ToString();
+
+
         }
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
@@ -436,8 +444,93 @@ namespace ChaseMagStageCreater
             pictures[partsListBox.SelectedIndex].Location = location;
 
         }
+        private void StagePartMouseDown(object sender, EventArgs e)
+        {
+            int index = pictures.IndexOf((PictureBox)sender);
+            partsListBox.SelectedIndex = index;
+            dragPictureIndex = index;
+            msgText.Text = "drag開始"+ stageData.stageParts[index].position.y;
+        }
 
+        private void StagePartMouseMove(object sender, EventArgs e)
+        {
+            if (dragPictureIndex < 0)
+            {
+                return;
+            }
+
+            pictures[dragPictureIndex].Location =PointToClient( MousePosition);
+
+            msgText.Text = "drag中" + stageData.stageParts[dragPictureIndex].position.y;
+        }
+
+        private void StagePartMouseUp(object sender, EventArgs e)
+        {
+            int index = pictures.IndexOf((PictureBox)sender);
+
+            BasePoint basePoint = categoryImageDatas[stageData.stageParts[index].category].basePoint;
+
+            // 位置のセット
+            stageData.stageParts[index].position = LocationToStagePosition(
+                pictures[index].Location,
+                pictures[index].Size,
+                 basePoint);
+            positionX.Value = (decimal)stageData.stageParts[index].position.x;
+            positionY.Value = (decimal)stageData.stageParts[index].position.y;
+
+            dragPictureIndex = -1;
+            msgText.Text = "drag終了" + stageData.stageParts[index].position.y;
+        }
+
+
+        private Vector2 LocationToStagePosition(Point point, Size size,BasePoint basePoint)
+        {
+            Point location = pictureBox1.Location;
+            // 原点へ
+            location.Offset((int)Math.Round(pictureBox1.Size.Width / 2.0f), pictureBox1.Size.Height);
+            switch (basePoint)
+            {
+                case BasePoint.Top:
+                    point.Offset((int)Math.Round(size.Width / 2.0f), 0);
+
+                    break;
+                case BasePoint.Center:
+                    point.Offset((int)Math.Round(size.Width / 2.0f), (int)Math.Round(size.Height / 2.0f));
+
+                    break;
+                case BasePoint.Bottom:
+                    point.Offset((int)Math.Round(size.Width / 2.0f), size.Height);
+
+                    break;
+
+            }
+
+            Vector2 deltaMove = new Vector2(point.X - location.X, point.Y - location.Y);
+
+            // ステージ上のポジションへ変換
+            Vector2 returnValue = new Vector2(
+                deltaMove.x / stageSizeMagnification,
+                deltaMove.y / stageSizeMagnification
+                );
+            // 0.5刻みにする
+            float increment = 0.5f;
+            returnValue = new Vector2(IncrementOfValue( returnValue.x, increment), -IncrementOfValue(returnValue.y, increment));
+            return returnValue;
+
+        }
+
+        private float IncrementOfValue(float value ,float increment)
+        {
+
+            float r = (float)(Math.Floor(value / increment) * increment);
+            if (r < value)
+                r += increment;
+            return r;
+
+
+        }
     }
+
 
 
 }
