@@ -37,7 +37,6 @@ namespace ChaseMagStageCreater
             this.wallButton = new System.Windows.Forms.RadioButton();
             this.NormalWallButton = new System.Windows.Forms.RadioButton();
             this.itemBoxButton = new System.Windows.Forms.RadioButton();
-            this.stageBox = new System.Windows.Forms.PictureBox();
             this.partsListBox = new System.Windows.Forms.ListBox();
             this.positionX = new System.Windows.Forms.NumericUpDown();
             this.positionY = new System.Windows.Forms.NumericUpDown();
@@ -74,9 +73,9 @@ namespace ChaseMagStageCreater
             this.msgText = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.stageBox = new System.Windows.Forms.PictureBox();
             this.stagePartsGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.stageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.positionX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.positionY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sizeX)).BeginInit();
@@ -88,6 +87,7 @@ namespace ChaseMagStageCreater
             ((System.ComponentModel.ISupportInitialize)(this.widthSize)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stageBox)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -181,16 +181,6 @@ namespace ChaseMagStageCreater
             this.itemBoxButton.Text = "アイテム箱";
             this.itemBoxButton.UseVisualStyleBackColor = true;
             // 
-            // stageBox
-            // 
-            this.stageBox.BackColor = System.Drawing.SystemColors.GrayText;
-            this.stageBox.Location = new System.Drawing.Point(194, 56);
-            this.stageBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.stageBox.Name = "stageBox";
-            this.stageBox.Size = new System.Drawing.Size(725, 600);
-            this.stageBox.TabIndex = 15;
-            this.stageBox.TabStop = false;
-            // 
             // partsListBox
             // 
             this.partsListBox.FormattingEnabled = true;
@@ -232,6 +222,11 @@ namespace ChaseMagStageCreater
             65536});
             this.positionY.Location = new System.Drawing.Point(115, 80);
             this.positionY.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.positionY.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
             this.positionY.Name = "positionY";
             this.positionY.Size = new System.Drawing.Size(100, 34);
             this.positionY.TabIndex = 18;
@@ -250,6 +245,7 @@ namespace ChaseMagStageCreater
             this.sizeX.Name = "sizeX";
             this.sizeX.Size = new System.Drawing.Size(100, 34);
             this.sizeX.TabIndex = 19;
+            this.sizeX.ValueChanged += new System.EventHandler(this.size_ValueChanged);
             // 
             // polePanel
             // 
@@ -384,6 +380,7 @@ namespace ChaseMagStageCreater
             this.sizeY.Name = "sizeY";
             this.sizeY.Size = new System.Drawing.Size(100, 34);
             this.sizeY.TabIndex = 26;
+            this.sizeY.ValueChanged += new System.EventHandler(this.size_ValueChanged);
             // 
             // heightSize
             // 
@@ -577,6 +574,16 @@ namespace ChaseMagStageCreater
             this.pictureBox1.TabIndex = 35;
             this.pictureBox1.TabStop = false;
             // 
+            // stageBox
+            // 
+            this.stageBox.BackColor = System.Drawing.SystemColors.GrayText;
+            this.stageBox.Location = new System.Drawing.Point(194, 56);
+            this.stageBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.stageBox.Name = "stageBox";
+            this.stageBox.Size = new System.Drawing.Size(725, 600);
+            this.stageBox.TabIndex = 15;
+            this.stageBox.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 27F);
@@ -603,7 +610,6 @@ namespace ChaseMagStageCreater
             this.stagePartsGroupBox.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.stageBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.positionX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.positionY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sizeX)).EndInit();
@@ -619,6 +625,7 @@ namespace ChaseMagStageCreater
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.stageBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

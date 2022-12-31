@@ -58,7 +58,7 @@ namespace ChaseMagStageCreater
             msgText.Text = string.Empty;
             stageData = new StageData();
             pictures = new List<PictureBox>();
-            stageData.width = 50.0f;
+            stageData.width = 100;
             stageData.height = 20.0f;
             stageSizeMagnification = pictureBox1.Size.Width / stageData.width;
             preIndex = -1;
@@ -161,6 +161,8 @@ namespace ChaseMagStageCreater
                     stageData.stageParts[preIndex].isNorth = northButton.Checked;
                 }
 
+                pictures[preIndex].Image = null;
+
             }
         }
 
@@ -194,7 +196,7 @@ namespace ChaseMagStageCreater
                 return;
             }
 
-
+            pictures[partsListBox.SelectedIndex].Image = Properties.Resources.SelectMask;
             preIndex = partsListBox.SelectedIndex;
             StagePart part = stageData.stageParts[partsListBox.SelectedIndex];
 
@@ -302,23 +304,23 @@ namespace ChaseMagStageCreater
             StagePart addpart = new StagePart();
             addpart.category = categoryPairs[checkedCategory];
             stageData.stageParts.Add(addpart);
+            AddStagePartsImage(addpart);
+
             ViewUpdate();
             partsListBox.SelectedIndex = stageData.stageParts.Count - 1;
 
-            AddStagePartsImage(addpart);
 
         }
 
         private void AddStagePartsImage(StagePart part)
         {
-            // test
 
             pictures.Add(new PictureBox());
             this.Controls.Add(pictures[pictures.Count - 1]);
 
             Size size = categoryImageDatas[part.category].bitmap[0].Size;
-            size = new Size((int)Math.Round(categoryImageDatas[part.category].scale.x * pixelMagnification * size.Width * stageSizeMagnification),
-                (int)Math.Round(categoryImageDatas[part.category].scale.y * pixelMagnification * size.Height * stageSizeMagnification));
+            size = new Size((int)Math.Round(categoryImageDatas[part.category].scale.x * pixelMagnification * size.Width * stageSizeMagnification* part.sizeMagnification.x),
+                (int)Math.Round(categoryImageDatas[part.category].scale.y * pixelMagnification * size.Height * stageSizeMagnification * part.sizeMagnification.y));
             Point location = pictureBox1.Location;
 
             location.Offset((int)Math.Round(pictureBox1.Size.Width / 2.0f), pictureBox1.Size.Height);
@@ -336,7 +338,6 @@ namespace ChaseMagStageCreater
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-
             ExportData(saveFileDialog1.FileName);
 
         }
@@ -394,12 +395,37 @@ namespace ChaseMagStageCreater
             return Point.Round(pointf);
         }
 
+
         private void position_ValueChanged(object sender, EventArgs e)
+        {
+            if (partsListBox.SelectedIndex < 0 || partsListBox.SelectedIndex >= pictures.Count)
+            {
+                return;
+            }
+            Point location = pictureBox1.Location;
+            // 原点へ
+            location.Offset((int)Math.Round(pictureBox1.Size.Width / 2.0f), pictureBox1.Size.Height);
+            Vector2 pos = new Vector2((float)positionX.Value * stageSizeMagnification,
+                (float)-positionY.Value * stageSizeMagnification);
+            BasePoint basePoint = categoryImageDatas[stageData.stageParts[partsListBox.SelectedIndex].category].basePoint;
+            location.Offset(StagePositionToLocation(pos, pictures[partsListBox.SelectedIndex].Size, basePoint));
+            pictures[partsListBox.SelectedIndex].Location = location;
+
+        }
+
+        private void size_ValueChanged(object sender, EventArgs e)
         {
             if (partsListBox.SelectedIndex < 0|| partsListBox.SelectedIndex >= pictures.Count )
             {
                 return;
             }
+            StagePartsCategory category = stageData.stageParts[partsListBox.SelectedIndex].category;
+            Size size = categoryImageDatas[category].bitmap[0].Size;
+            size = new Size((int)Math.Round(categoryImageDatas[category].scale.x * pixelMagnification * size.Width * stageSizeMagnification*(float)sizeX.Value),
+                (int)Math.Round(categoryImageDatas[category].scale.y * pixelMagnification * size.Height * stageSizeMagnification * (float)sizeY.Value));
+            pictures[partsListBox.SelectedIndex].Size = size;
+
+
             Point location = pictureBox1.Location;
             // 原点へ
             location.Offset((int)Math.Round(pictureBox1.Size.Width / 2.0f), pictureBox1.Size.Height);

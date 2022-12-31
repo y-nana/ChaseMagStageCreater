@@ -113,6 +113,16 @@ namespace ChaseMagStageCreater.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap SelectMask {
+            get {
+                object obj = ResourceManager.GetObject("SelectMask", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap wallNorth {
             get {
                 object obj = ResourceManager.GetObject("wallNorth", resourceCulture);
