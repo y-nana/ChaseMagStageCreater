@@ -72,7 +72,7 @@ namespace ChaseMagStageCreater
             this.AllPartsLabel = new System.Windows.Forms.Label();
             this.msgText = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.InStagePicture = new System.Windows.Forms.PictureBox();
             this.stageBox = new System.Windows.Forms.PictureBox();
             this.playerViewCheckBox = new System.Windows.Forms.CheckBox();
             this.stagePartsGroupBox.SuspendLayout();
@@ -87,7 +87,7 @@ namespace ChaseMagStageCreater
             this.stageSizeGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.widthSize)).BeginInit();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.InStagePicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stageBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -128,7 +128,7 @@ namespace ChaseMagStageCreater
             this.scaffoldButton.Location = new System.Drawing.Point(3, 4);
             this.scaffoldButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.scaffoldButton.Name = "scaffoldButton";
-            this.scaffoldButton.Size = new System.Drawing.Size(73, 31);
+            this.scaffoldButton.Size = new System.Drawing.Size(50, 22);
             this.scaffoldButton.TabIndex = 0;
             this.scaffoldButton.TabStop = true;
             this.scaffoldButton.Text = "足場";
@@ -137,10 +137,10 @@ namespace ChaseMagStageCreater
             // jumpRampButton
             // 
             this.jumpRampButton.AutoSize = true;
-            this.jumpRampButton.Location = new System.Drawing.Point(3, 43);
+            this.jumpRampButton.Location = new System.Drawing.Point(3, 34);
             this.jumpRampButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.jumpRampButton.Name = "jumpRampButton";
-            this.jumpRampButton.Size = new System.Drawing.Size(91, 31);
+            this.jumpRampButton.Size = new System.Drawing.Size(62, 22);
             this.jumpRampButton.TabIndex = 1;
             this.jumpRampButton.TabStop = true;
             this.jumpRampButton.Text = "磁力台";
@@ -149,10 +149,10 @@ namespace ChaseMagStageCreater
             // wallButton
             // 
             this.wallButton.AutoSize = true;
-            this.wallButton.Location = new System.Drawing.Point(3, 82);
+            this.wallButton.Location = new System.Drawing.Point(3, 64);
             this.wallButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.wallButton.Name = "wallButton";
-            this.wallButton.Size = new System.Drawing.Size(91, 31);
+            this.wallButton.Size = new System.Drawing.Size(62, 22);
             this.wallButton.TabIndex = 2;
             this.wallButton.TabStop = true;
             this.wallButton.Text = "磁力壁";
@@ -161,10 +161,10 @@ namespace ChaseMagStageCreater
             // NormalWallButton
             // 
             this.NormalWallButton.AutoSize = true;
-            this.NormalWallButton.Location = new System.Drawing.Point(3, 121);
+            this.NormalWallButton.Location = new System.Drawing.Point(3, 94);
             this.NormalWallButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.NormalWallButton.Name = "NormalWallButton";
-            this.NormalWallButton.Size = new System.Drawing.Size(109, 31);
+            this.NormalWallButton.Size = new System.Drawing.Size(74, 22);
             this.NormalWallButton.TabIndex = 3;
             this.NormalWallButton.TabStop = true;
             this.NormalWallButton.Text = "普通の壁";
@@ -173,10 +173,10 @@ namespace ChaseMagStageCreater
             // itemBoxButton
             // 
             this.itemBoxButton.AutoSize = true;
-            this.itemBoxButton.Location = new System.Drawing.Point(3, 160);
+            this.itemBoxButton.Location = new System.Drawing.Point(3, 124);
             this.itemBoxButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.itemBoxButton.Name = "itemBoxButton";
-            this.itemBoxButton.Size = new System.Drawing.Size(127, 31);
+            this.itemBoxButton.Size = new System.Drawing.Size(86, 22);
             this.itemBoxButton.TabIndex = 4;
             this.itemBoxButton.TabStop = true;
             this.itemBoxButton.Text = "アイテム箱";
@@ -185,7 +185,7 @@ namespace ChaseMagStageCreater
             // partsListBox
             // 
             this.partsListBox.FormattingEnabled = true;
-            this.partsListBox.ItemHeight = 27;
+            this.partsListBox.ItemHeight = 18;
             this.partsListBox.Location = new System.Drawing.Point(950, 93);
             this.partsListBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.partsListBox.Name = "partsListBox";
@@ -209,7 +209,7 @@ namespace ChaseMagStageCreater
             0,
             -2147483648});
             this.positionX.Name = "positionX";
-            this.positionX.Size = new System.Drawing.Size(100, 34);
+            this.positionX.Size = new System.Drawing.Size(100, 25);
             this.positionX.TabIndex = 17;
             this.positionX.ValueChanged += new System.EventHandler(this.position_ValueChanged);
             // 
@@ -229,7 +229,7 @@ namespace ChaseMagStageCreater
             0,
             -2147483648});
             this.positionY.Name = "positionY";
-            this.positionY.Size = new System.Drawing.Size(100, 34);
+            this.positionY.Size = new System.Drawing.Size(100, 25);
             this.positionY.TabIndex = 18;
             this.positionY.ValueChanged += new System.EventHandler(this.position_ValueChanged);
             // 
@@ -244,7 +244,7 @@ namespace ChaseMagStageCreater
             this.sizeX.Location = new System.Drawing.Point(115, 122);
             this.sizeX.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.sizeX.Name = "sizeX";
-            this.sizeX.Size = new System.Drawing.Size(100, 34);
+            this.sizeX.Size = new System.Drawing.Size(100, 25);
             this.sizeX.TabIndex = 19;
             this.sizeX.ValueChanged += new System.EventHandler(this.size_ValueChanged);
             // 
@@ -265,7 +265,7 @@ namespace ChaseMagStageCreater
             this.northButton.Location = new System.Drawing.Point(130, 37);
             this.northButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.northButton.Name = "northButton";
-            this.northButton.Size = new System.Drawing.Size(68, 31);
+            this.northButton.Size = new System.Drawing.Size(47, 22);
             this.northButton.TabIndex = 1;
             this.northButton.TabStop = true;
             this.northButton.Text = "N極";
@@ -277,18 +277,19 @@ namespace ChaseMagStageCreater
             this.southButton.Location = new System.Drawing.Point(43, 37);
             this.southButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.southButton.Name = "southButton";
-            this.southButton.Size = new System.Drawing.Size(66, 31);
+            this.southButton.Size = new System.Drawing.Size(46, 22);
             this.southButton.TabIndex = 0;
             this.southButton.TabStop = true;
             this.southButton.Text = "S極";
             this.southButton.UseVisualStyleBackColor = true;
+            this.southButton.CheckedChanged += new System.EventHandler(this.poleRadioButton_CheckedChanged);
             // 
             // poleLabel
             // 
             this.poleLabel.AutoSize = true;
             this.poleLabel.Location = new System.Drawing.Point(-1, 6);
             this.poleLabel.Name = "poleLabel";
-            this.poleLabel.Size = new System.Drawing.Size(84, 27);
+            this.poleLabel.Size = new System.Drawing.Size(56, 18);
             this.poleLabel.TabIndex = 25;
             this.poleLabel.Text = "磁力の極";
             // 
@@ -297,7 +298,7 @@ namespace ChaseMagStageCreater
             this.positionLabel.AutoSize = true;
             this.positionLabel.Location = new System.Drawing.Point(6, 45);
             this.positionLabel.Name = "positionLabel";
-            this.positionLabel.Size = new System.Drawing.Size(48, 27);
+            this.positionLabel.Size = new System.Drawing.Size(32, 18);
             this.positionLabel.TabIndex = 21;
             this.positionLabel.Text = "位置";
             // 
@@ -306,7 +307,7 @@ namespace ChaseMagStageCreater
             this.xPosLabel.AutoSize = true;
             this.xPosLabel.Location = new System.Drawing.Point(87, 45);
             this.xPosLabel.Name = "xPosLabel";
-            this.xPosLabel.Size = new System.Drawing.Size(22, 27);
+            this.xPosLabel.Size = new System.Drawing.Size(15, 18);
             this.xPosLabel.TabIndex = 22;
             this.xPosLabel.Text = "x";
             // 
@@ -315,7 +316,7 @@ namespace ChaseMagStageCreater
             this.yPosLabel.AutoSize = true;
             this.yPosLabel.Location = new System.Drawing.Point(87, 82);
             this.yPosLabel.Name = "yPosLabel";
-            this.yPosLabel.Size = new System.Drawing.Size(22, 27);
+            this.yPosLabel.Size = new System.Drawing.Size(15, 18);
             this.yPosLabel.TabIndex = 23;
             this.yPosLabel.Text = "y";
             // 
@@ -324,7 +325,7 @@ namespace ChaseMagStageCreater
             this.sizeLabel.AutoSize = true;
             this.sizeLabel.Location = new System.Drawing.Point(5, 129);
             this.sizeLabel.Name = "sizeLabel";
-            this.sizeLabel.Size = new System.Drawing.Size(66, 27);
+            this.sizeLabel.Size = new System.Drawing.Size(44, 18);
             this.sizeLabel.TabIndex = 24;
             this.sizeLabel.Text = "サイズ";
             // 
@@ -355,7 +356,7 @@ namespace ChaseMagStageCreater
             this.ySizeLabel.AutoSize = true;
             this.ySizeLabel.Location = new System.Drawing.Point(87, 166);
             this.ySizeLabel.Name = "ySizeLabel";
-            this.ySizeLabel.Size = new System.Drawing.Size(22, 27);
+            this.ySizeLabel.Size = new System.Drawing.Size(15, 18);
             this.ySizeLabel.TabIndex = 28;
             this.ySizeLabel.Text = "y";
             // 
@@ -364,7 +365,7 @@ namespace ChaseMagStageCreater
             this.xSizeLabel.AutoSize = true;
             this.xSizeLabel.Location = new System.Drawing.Point(87, 124);
             this.xSizeLabel.Name = "xSizeLabel";
-            this.xSizeLabel.Size = new System.Drawing.Size(22, 27);
+            this.xSizeLabel.Size = new System.Drawing.Size(15, 18);
             this.xSizeLabel.TabIndex = 27;
             this.xSizeLabel.Text = "x";
             // 
@@ -379,7 +380,7 @@ namespace ChaseMagStageCreater
             this.sizeY.Location = new System.Drawing.Point(115, 164);
             this.sizeY.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.sizeY.Name = "sizeY";
-            this.sizeY.Size = new System.Drawing.Size(100, 34);
+            this.sizeY.Size = new System.Drawing.Size(100, 25);
             this.sizeY.TabIndex = 26;
             this.sizeY.ValueChanged += new System.EventHandler(this.size_ValueChanged);
             // 
@@ -393,9 +394,20 @@ namespace ChaseMagStageCreater
             65536});
             this.heightSize.Location = new System.Drawing.Point(55, 58);
             this.heightSize.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.heightSize.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.heightSize.Name = "heightSize";
-            this.heightSize.Size = new System.Drawing.Size(100, 34);
+            this.heightSize.Size = new System.Drawing.Size(100, 25);
             this.heightSize.TabIndex = 27;
+            this.heightSize.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.heightSize.ValueChanged += new System.EventHandler(this.Size_ValueChanged);
             // 
             // stageSizeGroup
             // 
@@ -417,7 +429,7 @@ namespace ChaseMagStageCreater
             this.widthLabel.AutoSize = true;
             this.widthLabel.Location = new System.Drawing.Point(17, 111);
             this.widthLabel.Name = "widthLabel";
-            this.widthLabel.Size = new System.Drawing.Size(30, 27);
+            this.widthLabel.Size = new System.Drawing.Size(20, 18);
             this.widthLabel.TabIndex = 30;
             this.widthLabel.Text = "横";
             // 
@@ -426,7 +438,7 @@ namespace ChaseMagStageCreater
             this.heightLabel.AutoSize = true;
             this.heightLabel.Location = new System.Drawing.Point(19, 60);
             this.heightLabel.Name = "heightLabel";
-            this.heightLabel.Size = new System.Drawing.Size(30, 27);
+            this.heightLabel.Size = new System.Drawing.Size(20, 18);
             this.heightLabel.TabIndex = 29;
             this.heightLabel.Text = "縦";
             // 
@@ -440,9 +452,20 @@ namespace ChaseMagStageCreater
             65536});
             this.widthSize.Location = new System.Drawing.Point(55, 111);
             this.widthSize.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.widthSize.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.widthSize.Name = "widthSize";
-            this.widthSize.Size = new System.Drawing.Size(100, 34);
+            this.widthSize.Size = new System.Drawing.Size(100, 25);
             this.widthSize.TabIndex = 28;
+            this.widthSize.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.widthSize.ValueChanged += new System.EventHandler(this.Size_ValueChanged);
             // 
             // isAddMode
             // 
@@ -450,21 +473,20 @@ namespace ChaseMagStageCreater
             this.isAddMode.Location = new System.Drawing.Point(20, 41);
             this.isAddMode.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.isAddMode.Name = "isAddMode";
-            this.isAddMode.Size = new System.Drawing.Size(128, 31);
+            this.isAddMode.Size = new System.Drawing.Size(87, 22);
             this.isAddMode.TabIndex = 29;
             this.isAddMode.Text = "追加モード";
             this.isAddMode.UseVisualStyleBackColor = true;
             // 
             // menuStrip1
             // 
-            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ファイルFToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(10, 4, 0, 4);
-            this.menuStrip1.Size = new System.Drawing.Size(1200, 37);
+            this.menuStrip1.Size = new System.Drawing.Size(1200, 27);
             this.menuStrip1.TabIndex = 30;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -478,46 +500,46 @@ namespace ChaseMagStageCreater
             this.toolStripMenuItem1,
             this.ExitAppToolStripMenuItem});
             this.ファイルFToolStripMenuItem.Name = "ファイルFToolStripMenuItem";
-            this.ファイルFToolStripMenuItem.Size = new System.Drawing.Size(98, 29);
+            this.ファイルFToolStripMenuItem.Size = new System.Drawing.Size(67, 19);
             this.ファイルFToolStripMenuItem.Text = "ファイル(&F)";
             // 
             // CreateNewFileToolStripMenuItem
             // 
             this.CreateNewFileToolStripMenuItem.Name = "CreateNewFileToolStripMenuItem";
-            this.CreateNewFileToolStripMenuItem.Size = new System.Drawing.Size(279, 34);
+            this.CreateNewFileToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.CreateNewFileToolStripMenuItem.Text = "新規作成(&N)...";
             this.CreateNewFileToolStripMenuItem.Click += new System.EventHandler(this.CreateNewFileToolStripMenuItem_Click);
             // 
             // OpenFileToolStripMenuItem
             // 
             this.OpenFileToolStripMenuItem.Name = "OpenFileToolStripMenuItem";
-            this.OpenFileToolStripMenuItem.Size = new System.Drawing.Size(279, 34);
+            this.OpenFileToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.OpenFileToolStripMenuItem.Text = "開く(&O)...";
             this.OpenFileToolStripMenuItem.Click += new System.EventHandler(this.OpenFileToolStripMenuItem_Click);
             // 
             // OverWriteToolStripMenuItem
             // 
             this.OverWriteToolStripMenuItem.Name = "OverWriteToolStripMenuItem";
-            this.OverWriteToolStripMenuItem.Size = new System.Drawing.Size(279, 34);
+            this.OverWriteToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.OverWriteToolStripMenuItem.Text = "上書き保存(&S)";
             this.OverWriteToolStripMenuItem.Click += new System.EventHandler(this.OverWriteToolStripMenuItem_Click);
             // 
             // SaveFileToolStripMenuItem
             // 
             this.SaveFileToolStripMenuItem.Name = "SaveFileToolStripMenuItem";
-            this.SaveFileToolStripMenuItem.Size = new System.Drawing.Size(279, 34);
+            this.SaveFileToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.SaveFileToolStripMenuItem.Text = "名前を付けて保存(&A)...";
             this.SaveFileToolStripMenuItem.Click += new System.EventHandler(this.SaveFileToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(276, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(183, 6);
             // 
             // ExitAppToolStripMenuItem
             // 
             this.ExitAppToolStripMenuItem.Name = "ExitAppToolStripMenuItem";
-            this.ExitAppToolStripMenuItem.Size = new System.Drawing.Size(279, 34);
+            this.ExitAppToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.ExitAppToolStripMenuItem.Text = "終了(&X)";
             // 
             // deleteButton
@@ -547,7 +569,7 @@ namespace ChaseMagStageCreater
             this.AllPartsLabel.AutoSize = true;
             this.AllPartsLabel.Location = new System.Drawing.Point(947, 62);
             this.AllPartsLabel.Name = "AllPartsLabel";
-            this.AllPartsLabel.Size = new System.Drawing.Size(138, 27);
+            this.AllPartsLabel.Size = new System.Drawing.Size(92, 18);
             this.AllPartsLabel.TabIndex = 33;
             this.AllPartsLabel.Text = "すべてのパーツ";
             // 
@@ -555,9 +577,9 @@ namespace ChaseMagStageCreater
             // 
             this.msgText.AutoSize = true;
             this.msgText.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.msgText.Location = new System.Drawing.Point(17, 538);
+            this.msgText.Location = new System.Drawing.Point(9, 658);
             this.msgText.Name = "msgText";
-            this.msgText.Size = new System.Drawing.Size(46, 27);
+            this.msgText.Size = new System.Drawing.Size(32, 18);
             this.msgText.TabIndex = 34;
             this.msgText.Text = "text";
             // 
@@ -565,16 +587,16 @@ namespace ChaseMagStageCreater
             // 
             this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
             // 
-            // pictureBox1
+            // InStagePicture
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.White;
-            this.pictureBox1.Location = new System.Drawing.Point(207, 217);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(700, 280);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 35;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.InStagePicture.BackColor = System.Drawing.Color.White;
+            this.InStagePicture.Location = new System.Drawing.Point(207, 217);
+            this.InStagePicture.Name = "InStagePicture";
+            this.InStagePicture.Size = new System.Drawing.Size(700, 280);
+            this.InStagePicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.InStagePicture.TabIndex = 35;
+            this.InStagePicture.TabStop = false;
+            this.InStagePicture.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // stageBox
             // 
@@ -589,20 +611,20 @@ namespace ChaseMagStageCreater
             // playerViewCheckBox
             // 
             this.playerViewCheckBox.AutoSize = true;
-            this.playerViewCheckBox.Location = new System.Drawing.Point(20, 633);
+            this.playerViewCheckBox.Location = new System.Drawing.Point(12, 532);
             this.playerViewCheckBox.Name = "playerViewCheckBox";
-            this.playerViewCheckBox.Size = new System.Drawing.Size(131, 31);
+            this.playerViewCheckBox.Size = new System.Drawing.Size(89, 22);
             this.playerViewCheckBox.TabIndex = 36;
             this.playerViewCheckBox.Text = "checkBox1";
             this.playerViewCheckBox.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 27F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1200, 678);
             this.Controls.Add(this.playerViewCheckBox);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.InStagePicture);
             this.Controls.Add(this.msgText);
             this.Controls.Add(this.AllPartsLabel);
             this.Controls.Add(this.addButton);
@@ -637,7 +659,7 @@ namespace ChaseMagStageCreater
             ((System.ComponentModel.ISupportInitialize)(this.widthSize)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.InStagePicture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stageBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -689,7 +711,7 @@ namespace ChaseMagStageCreater
         private System.Windows.Forms.Label xSizeLabel;
         private System.Windows.Forms.NumericUpDown sizeY;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox InStagePicture;
         private System.Windows.Forms.CheckBox playerViewCheckBox;
     }
 }

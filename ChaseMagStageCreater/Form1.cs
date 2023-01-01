@@ -11,7 +11,7 @@ using System.Text.Json;
 using System.Text.Unicode;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.WindowsAPICodePack.Dialogs;
+//using Microsoft.WindowsAPICodePack.Dialogs;
 
 
 namespace ChaseMagStageCreater
@@ -31,6 +31,8 @@ namespace ChaseMagStageCreater
         private float stageSizeMagnification;
 
         private int dragPictureIndex;
+
+        private readonly int insideStageMargin = 10;
 
         private readonly float pixelMagnification = 0.01f;
 
@@ -61,9 +63,11 @@ namespace ChaseMagStageCreater
             stageData = new StageData();
             pictures = new List<PictureBox>();
             stageData.width = 80;
-            stageData.height = 20.0f;
-            stageSizeMagnification = pictureBox1.Size.Width / stageData.width;
-            pictureBox1.Height = (int)(stageData.height * stageSizeMagnification);
+            widthSize.Value = 80;
+            stageData.height = 20;
+            heightSize.Value = 20;
+            stageSizeMagnification = InStagePicture.Size.Width / stageData.width;
+            InStagePicture.Height = (int)(stageData.height * stageSizeMagnification);
             preIndex = -1;
             dragPictureIndex = -1;
             nowOpenPath = string.Empty;
@@ -318,9 +322,9 @@ namespace ChaseMagStageCreater
             Size size = categoryImageDatas[part.category].bitmap[0].Size;
             size = new Size((int)Math.Round(categoryImageDatas[part.category].scale.x * pixelMagnification * size.Width * stageSizeMagnification* part.sizeMagnification.x),
                 (int)Math.Round(categoryImageDatas[part.category].scale.y * pixelMagnification * size.Height * stageSizeMagnification * part.sizeMagnification.y));
-            Point location = pictureBox1.Location;
+            Point location = InStagePicture.Location;
 
-            location.Offset((int)Math.Round(pictureBox1.Size.Width / 2.0f), pictureBox1.Size.Height);
+            location.Offset((int)Math.Round(InStagePicture.Size.Width / 2.0f), InStagePicture.Size.Height);
 
             Vector2 position = new Vector2(part.position.x * stageSizeMagnification, -part.position.y * stageSizeMagnification);
             location.Offset(StagePositionToLocation(position, size, categoryImageDatas[part.category].basePoint));
@@ -390,9 +394,9 @@ namespace ChaseMagStageCreater
             {
                 return;
             }
-            Point location = pictureBox1.Location;
+            Point location = InStagePicture.Location;
             // 原点へ
-            location.Offset((int)Math.Round(pictureBox1.Size.Width / 2.0f), pictureBox1.Size.Height);
+            location.Offset((int)Math.Round(InStagePicture.Size.Width / 2.0f), InStagePicture.Size.Height);
             Vector2 pos = new Vector2((float)positionX.Value * stageSizeMagnification,
                 (float)-positionY.Value * stageSizeMagnification);
             BasePoint basePoint = categoryImageDatas[stageData.stageParts[partsListBox.SelectedIndex].category].basePoint;
@@ -414,9 +418,9 @@ namespace ChaseMagStageCreater
             pictures[partsListBox.SelectedIndex].Size = size;
 
 
-            Point location = pictureBox1.Location;
+            Point location = InStagePicture.Location;
             // 原点へ
-            location.Offset((int)Math.Round(pictureBox1.Size.Width / 2.0f), pictureBox1.Size.Height);
+            location.Offset((int)Math.Round(InStagePicture.Size.Width / 2.0f), InStagePicture.Size.Height);
             Vector2 pos = new Vector2((float)positionX.Value * stageSizeMagnification,
                 (float)-positionY.Value * stageSizeMagnification);
             BasePoint basePoint = categoryImageDatas[stageData.stageParts[partsListBox.SelectedIndex].category].basePoint;
@@ -439,7 +443,20 @@ namespace ChaseMagStageCreater
                 return;
             }
 
-            pictures[dragPictureIndex].Location =PointToClient( MousePosition);
+            Point mouseLocation = PointToClient(MousePosition);
+            // ドラッグでステージ外へ出せないように
+            if (mouseLocation.X < InStagePicture.Location.X ||
+                mouseLocation.X + pictures[dragPictureIndex].Width > InStagePicture.Location.X + InStagePicture.Size.Width||
+                mouseLocation.Y < InStagePicture.Location.Y || 
+                mouseLocation.Y + pictures[dragPictureIndex].Height> InStagePicture.Location.Y + InStagePicture.Size.Height)
+            {
+                return;
+            }
+
+            PointF picLocation = PointToClient(MousePosition);
+            picLocation.X -= pictures[dragPictureIndex].Width * 0.5f;
+            picLocation.Y -= pictures[dragPictureIndex].Height * 0.5f;
+            pictures[dragPictureIndex].Location = Point.Round(picLocation);
 
             msgText.Text = "drag中" + stageData.stageParts[dragPictureIndex].position.y;
         }
@@ -470,9 +487,9 @@ namespace ChaseMagStageCreater
 
         private Vector2 LocationToStagePosition(Point point, Size size,BasePoint basePoint)
         {
-            Point location = pictureBox1.Location;
+            Point location = InStagePicture.Location;
             // 原点へ
-            location.Offset((int)Math.Round(pictureBox1.Size.Width / 2.0f), pictureBox1.Size.Height);
+            location.Offset((int)Math.Round(InStagePicture.Size.Width / 2.0f), InStagePicture.Size.Height);
             switch (basePoint)
             {
                 case BasePoint.Top:
@@ -532,6 +549,71 @@ namespace ChaseMagStageCreater
 
             }
         }
+
+        private void poleRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (partsListBox.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            if (southButton.Checked)
+            {
+                pictures[partsListBox.SelectedIndex].BackgroundImage = categoryImageDatas[stageData.stageParts[partsListBox.SelectedIndex].category].bitmap[0];
+            }
+            else
+            {
+                pictures[partsListBox.SelectedIndex].BackgroundImage = categoryImageDatas[stageData.stageParts[partsListBox.SelectedIndex].category].bitmap[1];
+
+            }
+        }
+
+        // ステージのサイズを変更する
+        private void Size_ValueChanged(object sender, EventArgs e)
+        {
+
+            stageData.width = (float)widthSize.Value;
+            stageData.height = (float)heightSize.Value;
+
+            Size stagePictureSize  = new Size(stageBox.Size.Width - insideStageMargin * 2, stageBox.Size.Height - insideStageMargin * 2);
+
+            if (stageData.width >= stageData.height)
+            {
+                stageSizeMagnification = InStagePicture.Size.Width / stageData.width;
+                stagePictureSize.Height = (int)(stageData.height * stageSizeMagnification);
+            }
+            else
+            {
+                stageSizeMagnification = InStagePicture.Size.Height / stageData.height;
+                stagePictureSize.Width = (int)(stageData.width * stageSizeMagnification);
+            }
+            InStagePicture.Size = stagePictureSize;
+            Point stagePictureLocation = stageBox.Location;
+            stagePictureLocation.Offset((int)(stageBox.Size.Width * 0.5f), (int)(stageBox.Size.Height * 0.5f));
+            stagePictureLocation.Offset(-(int)(stagePictureSize.Width * 0.5f), -(int)(stagePictureSize.Height * 0.5f));
+            InStagePicture.Location = stagePictureLocation;
+            PictureViewReflesh();
+
+        }
+
+
+
+
+        private void PictureViewReflesh()
+        {
+            foreach (var item in pictures)
+            {
+                item.Dispose();
+            }
+            pictures.Clear();
+
+            for (int i = 0; i < stageData.stageParts.Count; i++)
+            {
+                AddStagePartsImage(stageData.stageParts[i]);
+
+            }
+        }
+
     }
 
 
