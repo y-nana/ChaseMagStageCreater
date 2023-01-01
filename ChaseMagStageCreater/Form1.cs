@@ -60,9 +60,10 @@ namespace ChaseMagStageCreater
             msgText.Text = string.Empty;
             stageData = new StageData();
             pictures = new List<PictureBox>();
-            stageData.width = 100;
+            stageData.width = 80;
             stageData.height = 20.0f;
             stageSizeMagnification = pictureBox1.Size.Width / stageData.width;
+            pictureBox1.Height = (int)(stageData.height * stageSizeMagnification);
             preIndex = -1;
             dragPictureIndex = -1;
             nowOpenPath = string.Empty;
@@ -245,21 +246,7 @@ namespace ChaseMagStageCreater
                 saveFileDialog1.Filter = "jsonファイル(*.json)|*.json";
                 saveFileDialog1.ShowDialog();
                 return;
-                /*
-                using (var fileDialog = new CommonOpenFileDialog()
-                {
-                    Title = "フォルダを選択してください",
-                    InitialDirectory = openPath,
-                    IsFolderPicker = true
-                })
-                {
-                    if (fileDialog.ShowDialog() != CommonFileDialogResult.Ok)
-                    {
-                        return;
-                    }
-                    nowOpenPath = fileDialog.FileName + "/StageData.json";
-                }
-                */
+
             }
 
             ExportData(nowOpenPath);
@@ -293,6 +280,15 @@ namespace ChaseMagStageCreater
 
         private void addButton_Click(object sender, EventArgs e)
         {
+
+            AddStageParts();
+
+
+        }
+
+        private bool AddStageParts()
+        {
+
             // 指定したグループ内のラジオボタンでチェックされている物を取り出す
             RadioButton checkedCategory = flowLayoutPanel1.Controls.OfType<RadioButton>()
                 .SingleOrDefault(rb => rb.Checked == true);
@@ -301,9 +297,8 @@ namespace ChaseMagStageCreater
             {
                 msgText.Text = "パーツの種類を選択してください";
                 scaffoldButton.Checked = true;
-                return;
+                return false;
             }
-
             StagePart addpart = new StagePart();
             addpart.category = categoryPairs[checkedCategory];
             stageData.stageParts.Add(addpart);
@@ -311,8 +306,7 @@ namespace ChaseMagStageCreater
 
             ViewUpdate();
             partsListBox.SelectedIndex = stageData.stageParts.Count - 1;
-
-
+            return true;
         }
 
         private void AddStagePartsImage(StagePart part)
@@ -355,21 +349,7 @@ namespace ChaseMagStageCreater
             saveFileDialog1.Filter = "jsonファイル(*.json)|*.json";
 
             saveFileDialog1.ShowDialog();
-            /*
-            using (var fileDialog = new CommonOpenFileDialog()
-            {
-                Title = "フォルダを選択してください",
-                InitialDirectory = openPath,
-                IsFolderPicker = true
-            })
-            {
-                if (fileDialog.ShowDialog() != CommonFileDialogResult.Ok)
-                {
-                    return;
-                }
-                nowOpenPath = fileDialog.FileName + "/StageData.json";
-            }
-            */
+
         }
 
         private void CreateNewFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -468,6 +448,15 @@ namespace ChaseMagStageCreater
         {
             int index = pictures.IndexOf((PictureBox)sender);
 
+            PictureLocationApply(index);
+
+
+            dragPictureIndex = -1;
+            msgText.Text = "drag終了" + stageData.stageParts[index].position.y;
+        }
+
+        private void PictureLocationApply(int index)
+        {
             BasePoint basePoint = categoryImageDatas[stageData.stageParts[index].category].basePoint;
 
             // 位置のセット
@@ -477,11 +466,7 @@ namespace ChaseMagStageCreater
                  basePoint);
             positionX.Value = (decimal)stageData.stageParts[index].position.x;
             positionY.Value = (decimal)stageData.stageParts[index].position.y;
-
-            dragPictureIndex = -1;
-            msgText.Text = "drag終了" + stageData.stageParts[index].position.y;
         }
-
 
         private Vector2 LocationToStagePosition(Point point, Size size,BasePoint basePoint)
         {
@@ -519,6 +504,8 @@ namespace ChaseMagStageCreater
 
         }
 
+
+
         private float IncrementOfValue(float value ,float increment)
         {
 
@@ -528,6 +515,22 @@ namespace ChaseMagStageCreater
             return r;
 
 
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            if (isAddMode.Checked)
+            {
+                if (AddStageParts())
+                {
+                    pictures[pictures.Count-1].Location = PointToClient(MousePosition);
+                    PictureLocationApply(pictures.Count - 1);
+
+                }
+                
+
+
+            }
         }
     }
 

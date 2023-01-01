@@ -74,6 +74,7 @@ namespace ChaseMagStageCreater
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.stageBox = new System.Windows.Forms.PictureBox();
+            this.playerViewCheckBox = new System.Windows.Forms.CheckBox();
             this.stagePartsGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.positionX)).BeginInit();
@@ -573,6 +574,7 @@ namespace ChaseMagStageCreater
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 35;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // stageBox
             // 
@@ -584,11 +586,22 @@ namespace ChaseMagStageCreater
             this.stageBox.TabIndex = 15;
             this.stageBox.TabStop = false;
             // 
+            // playerViewCheckBox
+            // 
+            this.playerViewCheckBox.AutoSize = true;
+            this.playerViewCheckBox.Location = new System.Drawing.Point(20, 633);
+            this.playerViewCheckBox.Name = "playerViewCheckBox";
+            this.playerViewCheckBox.Size = new System.Drawing.Size(131, 31);
+            this.playerViewCheckBox.TabIndex = 36;
+            this.playerViewCheckBox.Text = "checkBox1";
+            this.playerViewCheckBox.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 27F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1200, 678);
+            this.Controls.Add(this.playerViewCheckBox);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.msgText);
             this.Controls.Add(this.AllPartsLabel);
@@ -677,6 +690,7 @@ namespace ChaseMagStageCreater
         private System.Windows.Forms.NumericUpDown sizeY;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.CheckBox playerViewCheckBox;
     }
 }
 
