@@ -75,6 +75,7 @@ namespace ChaseMagStageCreater
             this.InStagePicture = new System.Windows.Forms.PictureBox();
             this.stageBox = new System.Windows.Forms.PictureBox();
             this.playerViewCheckBox = new System.Windows.Forms.CheckBox();
+            this.isMoveMode = new System.Windows.Forms.CheckBox();
             this.stagePartsGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.positionX)).BeginInit();
@@ -470,7 +471,7 @@ namespace ChaseMagStageCreater
             // isAddMode
             // 
             this.isAddMode.AutoSize = true;
-            this.isAddMode.Location = new System.Drawing.Point(20, 41);
+            this.isAddMode.Location = new System.Drawing.Point(19, 28);
             this.isAddMode.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.isAddMode.Name = "isAddMode";
             this.isAddMode.Size = new System.Drawing.Size(87, 22);
@@ -596,7 +597,8 @@ namespace ChaseMagStageCreater
             this.InStagePicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.InStagePicture.TabIndex = 35;
             this.InStagePicture.TabStop = false;
-            this.InStagePicture.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.InStagePicture.Click += new System.EventHandler(this.InStagePicture_Click);
+            this.InStagePicture.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.InStagePicture_MouseWheel);
             // 
             // stageBox
             // 
@@ -618,11 +620,23 @@ namespace ChaseMagStageCreater
             this.playerViewCheckBox.Text = "checkBox1";
             this.playerViewCheckBox.UseVisualStyleBackColor = true;
             // 
+            // isMoveMode
+            // 
+            this.isMoveMode.AutoSize = true;
+            this.isMoveMode.Location = new System.Drawing.Point(19, 58);
+            this.isMoveMode.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.isMoveMode.Name = "isMoveMode";
+            this.isMoveMode.Size = new System.Drawing.Size(123, 22);
+            this.isMoveMode.TabIndex = 37;
+            this.isMoveMode.Text = "ズーム移動モード";
+            this.isMoveMode.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 678);
+            this.ClientSize = new System.Drawing.Size(1200, 760);
+            this.Controls.Add(this.isMoveMode);
             this.Controls.Add(this.playerViewCheckBox);
             this.Controls.Add(this.InStagePicture);
             this.Controls.Add(this.msgText);
@@ -713,6 +727,7 @@ namespace ChaseMagStageCreater
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.PictureBox InStagePicture;
         private System.Windows.Forms.CheckBox playerViewCheckBox;
+        private System.Windows.Forms.CheckBox isMoveMode;
     }
 }
 

@@ -32,9 +32,15 @@ namespace ChaseMagStageCreater
 
         private int dragPictureIndex;
 
+        private ZoomManager zoomManager;
+
         private readonly int insideStageMargin = 10;
 
         private readonly float pixelMagnification = 0.01f;
+
+        private float stageBoxRatio;
+
+        private Size maxStagePictureSize;
 
         public Form1()
         {
@@ -53,6 +59,10 @@ namespace ChaseMagStageCreater
             categoryImageDatas.Add(StagePartsCategory.ItemBox, new ImageData(new Vector2(4,2.5f), Properties.Resources.itemBox,BasePoint.Bottom));
 
 
+            maxStagePictureSize = new Size(stageBox.Size.Width - insideStageMargin * 2, stageBox.Size.Height - insideStageMargin * 2);
+
+            stageBoxRatio = maxStagePictureSize.Width / (float)maxStagePictureSize.Height;
+
 
             categoryPairs = new Dictionary<RadioButton, StagePartsCategory>();
             for (int i = 0; i < flowLayoutPanel1.Controls.Count; i++)
@@ -62,15 +72,20 @@ namespace ChaseMagStageCreater
             msgText.Text = string.Empty;
             stageData = new StageData();
             pictures = new List<PictureBox>();
+            zoomManager = new ZoomManager(new Vector2(InStagePicture.Size.Width, InStagePicture.Size.Height));
+
             stageData.width = 80;
-            widthSize.Value = 80;
             stageData.height = 20;
+            widthSize.Value = 80;
             heightSize.Value = 20;
-            stageSizeMagnification = InStagePicture.Size.Width / stageData.width;
-            InStagePicture.Height = (int)(stageData.height * stageSizeMagnification);
+
+
             preIndex = -1;
             dragPictureIndex = -1;
             nowOpenPath = string.Empty;
+
+
+
             ViewUpdate();
         }
 
@@ -534,7 +549,8 @@ namespace ChaseMagStageCreater
 
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        // 追加モードだったらパーツを追加する
+        private void InStagePicture_Click(object sender, EventArgs e)
         {
             if (isAddMode.Checked)
             {
@@ -544,12 +560,26 @@ namespace ChaseMagStageCreater
                     PictureLocationApply(pictures.Count - 1);
 
                 }
-                
-
-
             }
+
+
         }
 
+
+        // ズーム
+        private void InStagePicture_MouseWheel(object sender, MouseEventArgs e)
+        {
+            msgText.Text = e.Delta.ToString();
+            Point mouseLocation = e.Location;
+            mouseLocation.Offset(stageBox.Location.X * -1, stageBox.Location.Y * -1);
+            // ステージの中心からどれだけ離れた位置でズームしたか
+            zoomManager.ZoomChange(e.Delta, mouseLocation.X-( stageBox.Location.X + stageBox.Size.Width * 0.5f));
+            PictureViewReflesh();
+            
+            
+        }
+
+        // パーツの磁力の向きを変更する
         private void poleRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (partsListBox.SelectedIndex < 0)
@@ -575,32 +605,56 @@ namespace ChaseMagStageCreater
             stageData.width = (float)widthSize.Value;
             stageData.height = (float)heightSize.Value;
 
-            Size stagePictureSize  = new Size(stageBox.Size.Width - insideStageMargin * 2, stageBox.Size.Height - insideStageMargin * 2);
 
-            if (stageData.width >= stageData.height)
+            if (stageData.width >= stageData.height * stageBoxRatio)
             {
-                stageSizeMagnification = InStagePicture.Size.Width / stageData.width;
-                stagePictureSize.Height = (int)(stageData.height * stageSizeMagnification);
+                stageSizeMagnification = maxStagePictureSize.Width / stageData.width;
+                maxStagePictureSize.Height = (int)(stageData.height * stageSizeMagnification);
             }
             else
             {
-                stageSizeMagnification = InStagePicture.Size.Height / stageData.height;
-                stagePictureSize.Width = (int)(stageData.width * stageSizeMagnification);
+                
+                stageSizeMagnification = maxStagePictureSize.Height / stageData.height;
+                maxStagePictureSize.Width = (int)(stageData.width * stageSizeMagnification);
             }
-            InStagePicture.Size = stagePictureSize;
+            InStagePicture.Size = maxStagePictureSize;
             Point stagePictureLocation = stageBox.Location;
             stagePictureLocation.Offset((int)(stageBox.Size.Width * 0.5f), (int)(stageBox.Size.Height * 0.5f));
-            stagePictureLocation.Offset(-(int)(stagePictureSize.Width * 0.5f), -(int)(stagePictureSize.Height * 0.5f));
+            stagePictureLocation.Offset(-(int)(maxStagePictureSize.Width * 0.5f), -(int)(maxStagePictureSize.Height * 0.5f));
             InStagePicture.Location = stagePictureLocation;
+            zoomManager.ResetZoom(new Vector2(InStagePicture.Size.Width, InStagePicture.Size.Height));
             PictureViewReflesh();
 
         }
 
 
 
-
+        // パーツの再配置
         private void PictureViewReflesh()
         {
+
+
+
+
+            if (stageData.width >= stageData.height * stageBoxRatio)
+            {
+                stageSizeMagnification = zoomManager.viewStagePictureSize.x / stageData.width;
+                maxStagePictureSize.Height = (int)(stageData.height * stageSizeMagnification);
+            }
+            else
+            {
+
+                stageSizeMagnification = zoomManager.viewStagePictureSize.y / stageData.height;
+                maxStagePictureSize.Width = (int)(stageData.width * stageSizeMagnification);
+            }
+
+            InStagePicture.Size = maxStagePictureSize;
+            Point stagePictureLocation = stageBox.Location;
+            stagePictureLocation.Offset((int)(stageBox.Size.Width * 0.5f), (int)(stageBox.Size.Height * 0.5f));
+            stagePictureLocation.Offset(-(int)(maxStagePictureSize.Width * 0.5f), -(int)(maxStagePictureSize.Height * 0.5f));
+            InStagePicture.Location = stagePictureLocation;
+
+
             foreach (var item in pictures)
             {
                 item.Dispose();
