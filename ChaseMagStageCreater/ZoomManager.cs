@@ -9,14 +9,15 @@ namespace ChaseMagStageCreater
     public class ZoomManager
     {
 
-        private float zoomValue;      // 現在何倍か（％）
+        public float zoomValue { get; private set; }     // 現在何倍か
+        public bool isZoomed { get; private set; }
         public float zoomLocation { get; private set; }      // どこが中心か
         public Vector2 viewStagePictureSize { get; private set; }
         private Vector2 baseStageSize;
 
-        private readonly float wheelPercentValue = 0.1f;
+        //private readonly float wheelPercentValue = 2.0f;
         private readonly float maxZoomValue = 2.0f;
-        private readonly float minZoomValue = 1.0f;
+        //private readonly float minZoomValue = 1.0f;
 
         private readonly float defaultPercent = 1.0f;
 
@@ -26,21 +27,20 @@ namespace ChaseMagStageCreater
             zoomValue = defaultPercent;
             this.baseStageSize = baseStageSize;
             viewStagePictureSize = baseStageSize;
-            
+            isZoomed = false;
 
         }
 
 
         //ズームする
-        public void ZoomChange(int deltaWheel, float locationX)
+        public void ZoomChange(int deltaWheel)
         {
-            this.zoomLocation = locationX;
 
             if (deltaWheel > 0)
             {
-                
-                zoomValue += wheelPercentValue;
-                if (zoomValue > maxZoomValue)
+                isZoomed = true;
+                //zoomValue += wheelPercentValue;
+                //if (zoomValue > maxZoomValue)
                 {
                     zoomValue = maxZoomValue;
                 }
@@ -48,11 +48,15 @@ namespace ChaseMagStageCreater
             }
             else if(deltaWheel < 0)
             {
-                zoomValue -= wheelPercentValue;
-                if (zoomValue < minZoomValue)
+                isZoomed = false;
+                //zoomValue -= wheelPercentValue;
+                //if (zoomValue < minZoomValue)
                 {
-                    zoomValue = minZoomValue;
+                    zoomValue = defaultPercent;
                 }
+
+                zoomLocation = 0.0f;
+
             }
             ZoomAplly();
         }
@@ -67,12 +71,37 @@ namespace ChaseMagStageCreater
         public void ResetZoom(Vector2 size)
         {
             baseStageSize = size;
+            zoomLocation = 0.0f;
+
+            isZoomed = false;
             zoomValue = defaultPercent;
             ZoomAplly();
         }
          
 
+        public void ChangeFocus(int value)
+        {
+            if (!isZoomed)
+            {
+                return;
+            }
 
+
+
+            zoomLocation += value;
+            if (zoomLocation > (viewStagePictureSize.x - baseStageSize.x) * 0.5f)
+            {
+                zoomLocation = (viewStagePictureSize.x - baseStageSize.x) * 0.5f;
+            }
+            else if(zoomLocation < -(viewStagePictureSize.x - baseStageSize.x) * 0.5f)
+            {
+                zoomLocation = -(viewStagePictureSize.x - baseStageSize.x) * 0.5f;
+
+            }
+
+
+
+        }
 
 
 

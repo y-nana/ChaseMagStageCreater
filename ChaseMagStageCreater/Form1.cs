@@ -42,6 +42,8 @@ namespace ChaseMagStageCreater
 
         private Size maxStagePictureSize;
 
+        
+
         public Form1()
         {
             InitializeComponent();
@@ -328,6 +330,7 @@ namespace ChaseMagStageCreater
             return true;
         }
 
+        // ステージパーツをビューに追加表示する
         private void AddStagePartsImage(StagePart part)
         {
 
@@ -343,16 +346,33 @@ namespace ChaseMagStageCreater
 
             Vector2 position = new Vector2(part.position.x * stageSizeMagnification, -part.position.y * stageSizeMagnification);
             location.Offset(StagePositionToLocation(position, size, categoryImageDatas[part.category].basePoint));
+            location.Offset((int)(zoomManager.zoomLocation), 0);
+            
             pictures[pictures.Count - 1].Location = location;
             pictures[pictures.Count - 1].Size = size;
-            pictures[pictures.Count - 1].BackgroundImage = categoryImageDatas[part.category].bitmap[0];
+
+
+            if (IsSetPole(part.category)&& !part.isNorth)
+            {
+                pictures[pictures.Count - 1].BackgroundImage = categoryImageDatas[part.category].bitmap[1];
+            }
+            else
+            {
+                pictures[pictures.Count - 1].BackgroundImage = categoryImageDatas[part.category].bitmap[0];
+
+            }
+
             pictures[pictures.Count - 1].BackgroundImageLayout = ImageLayout.Stretch;
             pictures[pictures.Count - 1].BringToFront();
             pictures[pictures.Count - 1].MouseDown += StagePartMouseDown;
             pictures[pictures.Count - 1].MouseUp += StagePartMouseUp;
             pictures[pictures.Count - 1].MouseMove += StagePartMouseMove;
 
-            msgText.Text = size.ToString();
+            if (location.X < InStagePicture.Location.X || location.X+size.Width > InStagePicture.Location.X + InStagePicture.Width)
+            {
+                pictures[pictures.Count - 1].Visible = false;
+
+            }
 
 
         }
@@ -402,7 +422,7 @@ namespace ChaseMagStageCreater
             return Point.Round(pointf);
         }
 
-
+        // 位置の値を変更する
         private void position_ValueChanged(object sender, EventArgs e)
         {
             if (partsListBox.SelectedIndex < 0 || partsListBox.SelectedIndex >= pictures.Count)
@@ -416,10 +436,19 @@ namespace ChaseMagStageCreater
                 (float)-positionY.Value * stageSizeMagnification);
             BasePoint basePoint = categoryImageDatas[stageData.stageParts[partsListBox.SelectedIndex].category].basePoint;
             location.Offset(StagePositionToLocation(pos, pictures[partsListBox.SelectedIndex].Size, basePoint));
+            location.Offset((int)zoomManager.zoomLocation,0);
             pictures[partsListBox.SelectedIndex].Location = location;
+
+            pictures[partsListBox.SelectedIndex].Visible = StageOfRangeIn(pictures[partsListBox.SelectedIndex]);
+
+
+
+
+
 
         }
 
+        // サイズの値を変更する
         private void size_ValueChanged(object sender, EventArgs e)
         {
             if (partsListBox.SelectedIndex < 0|| partsListBox.SelectedIndex >= pictures.Count )
@@ -443,14 +472,16 @@ namespace ChaseMagStageCreater
             pictures[partsListBox.SelectedIndex].Location = location;
 
         }
+
+        // ドラッグでパーツを移動し始める
         private void StagePartMouseDown(object sender, EventArgs e)
         {
             int index = pictures.IndexOf((PictureBox)sender);
             partsListBox.SelectedIndex = index;
             dragPictureIndex = index;
-            msgText.Text = "drag開始"+ stageData.stageParts[index].position.y;
         }
 
+        // ドラッグでパーツを移動させる
         private void StagePartMouseMove(object sender, EventArgs e)
         {
             if (dragPictureIndex < 0)
@@ -473,9 +504,9 @@ namespace ChaseMagStageCreater
             picLocation.Y -= pictures[dragPictureIndex].Height * 0.5f;
             pictures[dragPictureIndex].Location = Point.Round(picLocation);
 
-            msgText.Text = "drag中" + stageData.stageParts[dragPictureIndex].position.y;
         }
 
+        // パーツの移動終了
         private void StagePartMouseUp(object sender, EventArgs e)
         {
             int index = pictures.IndexOf((PictureBox)sender);
@@ -484,22 +515,26 @@ namespace ChaseMagStageCreater
 
 
             dragPictureIndex = -1;
-            msgText.Text = "drag終了" + stageData.stageParts[index].position.y;
         }
 
+        // 移動させた場所をデータとして反映させる
         private void PictureLocationApply(int index)
         {
             BasePoint basePoint = categoryImageDatas[stageData.stageParts[index].category].basePoint;
 
+            Point partLocation = pictures[index].Location;
+            partLocation.Offset(-(int)zoomManager.zoomLocation,0);
+
             // 位置のセット
             stageData.stageParts[index].position = LocationToStagePosition(
-                pictures[index].Location,
+                partLocation,
                 pictures[index].Size,
                  basePoint);
             positionX.Value = (decimal)stageData.stageParts[index].position.x;
             positionY.Value = (decimal)stageData.stageParts[index].position.y;
         }
 
+        // アプリケーション上の座標をUnity内の座標へ変換する
         private Vector2 LocationToStagePosition(Point point, Size size,BasePoint basePoint)
         {
             Point location = InStagePicture.Location;
@@ -537,7 +572,7 @@ namespace ChaseMagStageCreater
         }
 
 
-
+        // 指定の値刻みの値を返す
         private float IncrementOfValue(float value ,float increment)
         {
 
@@ -549,10 +584,12 @@ namespace ChaseMagStageCreater
 
         }
 
-        // 追加モードだったらパーツを追加する
+        // ステージ内をクリックする
         private void InStagePicture_Click(object sender, EventArgs e)
         {
-            if (isAddMode.Checked)
+            // 追加モードだったらパーツを追加する
+
+            if (addModeButtom.Checked)
             {
                 if (AddStageParts())
                 {
@@ -561,19 +598,31 @@ namespace ChaseMagStageCreater
 
                 }
             }
+            // 視点移動モードでズーム中だったら視点を移動する
+            else if (viewMoveModeButton.Checked)
+            {
+                PreDataSave();
+                Point mouseLocation = PointToClient(MousePosition);
+                int value = 20;
+                if (mouseLocation.X > InStagePicture.Location.X + InStagePicture.Width * 0.5f)
+                {
+                    value *= -1;
+                }
+                zoomManager.ChangeFocus(value);
+                PictureViewReflesh();
+
+            }
 
 
         }
 
 
-        // ズーム
+        // ズームする
         private void InStagePicture_MouseWheel(object sender, MouseEventArgs e)
         {
-            msgText.Text = e.Delta.ToString();
-            Point mouseLocation = e.Location;
-            mouseLocation.Offset(stageBox.Location.X * -1, stageBox.Location.Y * -1);
-            // ステージの中心からどれだけ離れた位置でズームしたか
-            zoomManager.ZoomChange(e.Delta, mouseLocation.X-( stageBox.Location.X + stageBox.Size.Width * 0.5f));
+            PreDataSave();
+
+            zoomManager.ZoomChange(e.Delta);
             PictureViewReflesh();
             
             
@@ -633,9 +682,6 @@ namespace ChaseMagStageCreater
         private void PictureViewReflesh()
         {
 
-
-
-
             if (stageData.width >= stageData.height * stageBoxRatio)
             {
                 stageSizeMagnification = zoomManager.viewStagePictureSize.x / stageData.width;
@@ -666,7 +712,67 @@ namespace ChaseMagStageCreater
                 AddStagePartsImage(stageData.stageParts[i]);
 
             }
+            UpdateCornerLabel();
         }
+
+
+        // ステージ表示の端の位置を知らせるラベルの更新
+        private void UpdateCornerLabel()
+        {
+
+            float temp = (stageData.width * 0.5f) / zoomManager.zoomValue;
+            float move = -zoomManager.zoomLocation / stageSizeMagnification;
+
+            topleftLabel.Text = (-temp + move).ToString() + ", " + stageData.height.ToString();
+            topRightLabel.Text = (temp + move).ToString() + ", " + stageData.height.ToString();
+            bottomLeftLabel.Text = (-temp + move).ToString() + ", " + 0.ToString();
+            bottomRightLabel.Text = (temp + move).ToString() + ", " + 0.ToString();
+
+
+
+            // 表示位置の調整
+            int margin = 5;
+
+            Point location = InStagePicture.Location;
+            location.Offset(0, -(topleftLabel.Height + margin));
+            topleftLabel.Location = location;
+
+            location = InStagePicture.Location;
+            location.Offset(InStagePicture.Width - topRightLabel.Width, -(topRightLabel.Height + margin));
+            topRightLabel.Location = location;
+
+            location = InStagePicture.Location;
+            location.Offset(0, (InStagePicture.Height + margin));
+            bottomLeftLabel.Location = location;
+
+            location = InStagePicture.Location;
+            location.Offset(InStagePicture.Width - topRightLabel.Width, (InStagePicture.Height + margin));
+            bottomRightLabel.Location = location;
+
+        }
+
+        // パーツを表示するかどうか
+        private bool StageOfRangeIn(PictureBox picture)
+        {
+            if (picture.Location.X < InStagePicture.Location.X)
+            {
+                return false;
+            }
+            if (picture.Location.X + picture.Width > InStagePicture.Location.X + InStagePicture.Width)
+            {
+                return false;
+            }
+            if (picture.Location.Y < InStagePicture.Location.Y)
+            {
+                return false;
+            }
+            if (picture.Location.Y + picture.Height > InStagePicture.Location.Y + InStagePicture.Height)
+            {
+                return false;
+            }
+            return true;
+        }
+
 
     }
 
