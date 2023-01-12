@@ -16,7 +16,7 @@ using System.Windows.Forms;
 
 namespace ChaseMagStageCreater
 {
-    public partial class Form1 : Form
+    public partial class CreateStageForm : Form
     {
 
         private StageData stageData;
@@ -44,7 +44,7 @@ namespace ChaseMagStageCreater
 
         
 
-        public Form1()
+        public CreateStageForm()
         {
             InitializeComponent();
         }

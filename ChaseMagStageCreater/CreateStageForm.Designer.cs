@@ -1,7 +1,7 @@
 ﻿
 namespace ChaseMagStageCreater
 {
-    partial class Form1
+    partial class CreateStageForm
     {
         /// <summary>
         /// 必要なデザイナー変数です。
@@ -685,7 +685,7 @@ namespace ChaseMagStageCreater
             this.mode.TabStop = false;
             this.mode.Text = "モード";
             // 
-            // Form1
+            // CreateStageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 27F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -710,7 +710,7 @@ namespace ChaseMagStageCreater
             this.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "Form1";
+            this.Name = "CreateStageForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.stagePartsGroupBox.ResumeLayout(false);

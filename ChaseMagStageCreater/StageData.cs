@@ -34,6 +34,8 @@ namespace ChaseMagStageCreater
         public List<StagePart> stageParts { get; set; } = new List<StagePart>();
         public float width { get; set; }
         public float height { get; set; }
+
+        
     }
 
     public struct Vector2
