@@ -15,7 +15,7 @@ namespace ChaseMagStageCreater
         Bottom
     }
 
-    public class ImageData
+    public class PictureBoxData
     {
 
         public Vector2 scale { get; set; }
@@ -24,13 +24,13 @@ namespace ChaseMagStageCreater
 
         public BasePoint basePoint { get; set; }
 
-        public ImageData(Vector2 scale,Bitmap bitmap, BasePoint basePoint)
+        public PictureBoxData(Vector2 scale,Bitmap bitmap, BasePoint basePoint)
         {
             this.scale = scale;
             this.bitmap = new Bitmap[1] { bitmap };
             this.basePoint = basePoint;
         }
-        public ImageData(Vector2 scale, Bitmap bitmap, Bitmap altBitmap, BasePoint basePoint)
+        public PictureBoxData(Vector2 scale, Bitmap bitmap, Bitmap altBitmap, BasePoint basePoint)
         {
             this.scale = scale;
             this.bitmap = new Bitmap[2] { bitmap, altBitmap };

@@ -218,7 +218,7 @@ namespace ChaseMagStageCreater
             this.positionX.Name = "positionX";
             this.positionX.Size = new System.Drawing.Size(100, 34);
             this.positionX.TabIndex = 17;
-            this.positionX.ValueChanged += new System.EventHandler(this.position_ValueChanged);
+            this.positionX.ValueChanged += new System.EventHandler(this.position_ValueChanged_X);
             // 
             // positionY
             // 
@@ -238,7 +238,7 @@ namespace ChaseMagStageCreater
             this.positionY.Name = "positionY";
             this.positionY.Size = new System.Drawing.Size(100, 34);
             this.positionY.TabIndex = 18;
-            this.positionY.ValueChanged += new System.EventHandler(this.position_ValueChanged);
+            this.positionY.ValueChanged += new System.EventHandler(this.position_ValueChanged_Y);
             // 
             // sizeX
             // 
@@ -253,7 +253,7 @@ namespace ChaseMagStageCreater
             this.sizeX.Name = "sizeX";
             this.sizeX.Size = new System.Drawing.Size(100, 34);
             this.sizeX.TabIndex = 19;
-            this.sizeX.ValueChanged += new System.EventHandler(this.size_ValueChanged);
+            this.sizeX.ValueChanged += new System.EventHandler(this.size_ValueChanged_X);
             // 
             // polePanel
             // 
@@ -389,7 +389,7 @@ namespace ChaseMagStageCreater
             this.sizeY.Name = "sizeY";
             this.sizeY.Size = new System.Drawing.Size(100, 34);
             this.sizeY.TabIndex = 26;
-            this.sizeY.ValueChanged += new System.EventHandler(this.size_ValueChanged);
+            this.sizeY.ValueChanged += new System.EventHandler(this.size_ValueChanged_Y);
             // 
             // heightSize
             // 
@@ -615,7 +615,7 @@ namespace ChaseMagStageCreater
             this.playerViewCheckBox.TabIndex = 36;
             this.playerViewCheckBox.Text = "checkBox1";
             this.playerViewCheckBox.UseVisualStyleBackColor = true;
-            this.playerViewCheckBox.Visible = false;
+            this.playerViewCheckBox.CheckedChanged += new System.EventHandler(this.playerViewCheckBox_CheckedChanged);
             // 
             // bottomLeftLabel
             // 
@@ -712,7 +712,7 @@ namespace ChaseMagStageCreater
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "CreateStageForm";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.CreateStageForm_Load);
             this.stagePartsGroupBox.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();

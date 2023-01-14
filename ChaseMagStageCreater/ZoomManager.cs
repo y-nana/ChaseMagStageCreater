@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChaseMagStageCreater
 {
+    // ズームを管理するクラス
     public class ZoomManager
     {
 
@@ -68,6 +69,7 @@ namespace ChaseMagStageCreater
             viewStagePictureSize = new Vector2(baseStageSize.x * zoomValue, baseStageSize.y * zoomValue);
         }
 
+        // ズームをリセットする
         public void ResetZoom(Vector2 size)
         {
             baseStageSize = size;
@@ -78,7 +80,7 @@ namespace ChaseMagStageCreater
             ZoomAplly();
         }
          
-
+        // ズーム中の視点を変更する
         public void ChangeFocus(int value)
         {
             if (!isZoomed)

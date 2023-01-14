@@ -86,11 +86,16 @@
     <Compile Include="CreateStageForm.Designer.cs">
       <DependentUpon>CreateStageForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImageData.cs" />
+    <Compile Include="JsonManager.cs" />
+    <Compile Include="LocationConverter.cs" />
+    <Compile Include="PictureBoxData.cs" />
+    <Compile Include="PictureBoxDataManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\StageDataManager.cs" />
+    <Compile Include="StageDataManager.cs" />
     <Compile Include="StageData.cs" />
+    <Compile Include="StagePart.cs" />
+    <Compile Include="Vector2.cs" />
     <Compile Include="ZoomManager.cs" />
     <EmbeddedResource Include="CreateStageForm.resx">
       <DependentUpon>CreateStageForm.cs</DependentUpon>
