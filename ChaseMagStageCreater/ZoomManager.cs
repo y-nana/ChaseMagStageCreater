@@ -16,13 +16,13 @@ namespace ChaseMagStageCreater
         public Vector2 viewStagePictureSize { get; private set; }
         private Vector2 baseStageSize;
 
-        //private readonly float wheelPercentValue = 2.0f;
-        private readonly float maxZoomValue = 2.0f;
-        //private readonly float minZoomValue = 1.0f;
+        public readonly float maxZoomValue = 2.0f;
 
         private readonly float defaultPercent = 1.0f;
 
-        private readonly float moveValue = 20;
+        private readonly float wheelPercentValue = 0.1f;
+
+        private readonly float moveValue = 40;
 
         public ZoomManager(Vector2 baseStageSize)
         {
@@ -41,8 +41,8 @@ namespace ChaseMagStageCreater
             if (deltaWheel > 0)
             {
                 isZoomed = true;
-                //zoomValue += wheelPercentValue;
-                //if (zoomValue > maxZoomValue)
+                zoomValue += wheelPercentValue;
+                if (zoomValue > maxZoomValue)
                 {
                     zoomValue = maxZoomValue;
                 }
@@ -51,12 +51,32 @@ namespace ChaseMagStageCreater
             else if(deltaWheel < 0)
             {
                 isZoomed = false;
-                //zoomValue -= wheelPercentValue;
-                //if (zoomValue < minZoomValue)
+                zoomValue -= wheelPercentValue;
+                if (zoomValue < defaultPercent)
                 {
                     zoomValue = defaultPercent;
                 }
 
+                zoomLocation = 0.0f;
+
+            }
+            ZoomAplly();
+        }
+
+        //ズームする
+        public void ZoomChange(bool ZoomIn)
+        {
+
+            if (ZoomIn)
+            {
+                isZoomed = true;
+                zoomValue = maxZoomValue;
+
+            }
+            else
+            {
+                isZoomed = false;
+                zoomValue = defaultPercent;
                 zoomLocation = 0.0f;
 
             }

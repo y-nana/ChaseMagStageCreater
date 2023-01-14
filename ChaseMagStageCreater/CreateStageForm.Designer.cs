@@ -37,6 +37,7 @@ namespace ChaseMagStageCreater
             this.wallButton = new System.Windows.Forms.RadioButton();
             this.NormalWallButton = new System.Windows.Forms.RadioButton();
             this.itemBoxButton = new System.Windows.Forms.RadioButton();
+            this.poleScaffoldButtom = new System.Windows.Forms.RadioButton();
             this.partsListBox = new System.Windows.Forms.ListBox();
             this.positionX = new System.Windows.Forms.NumericUpDown();
             this.positionY = new System.Windows.Forms.NumericUpDown();
@@ -59,13 +60,15 @@ namespace ChaseMagStageCreater
             this.heightLabel = new System.Windows.Forms.Label();
             this.widthSize = new System.Windows.Forms.NumericUpDown();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.ファイルFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CreateNewFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OverWriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.ExitAppToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allDeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.AllPartsLabel = new System.Windows.Forms.Label();
@@ -81,6 +84,7 @@ namespace ChaseMagStageCreater
             this.addModeButtom = new System.Windows.Forms.RadioButton();
             this.viewMoveModeButton = new System.Windows.Forms.RadioButton();
             this.mode = new System.Windows.Forms.GroupBox();
+            this.selectModeButtom = new System.Windows.Forms.RadioButton();
             this.stagePartsGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.positionX)).BeginInit();
@@ -110,7 +114,7 @@ namespace ChaseMagStageCreater
             this.stagePartsGroupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.stagePartsGroupBox.Name = "stagePartsGroupBox";
             this.stagePartsGroupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.stagePartsGroupBox.Size = new System.Drawing.Size(176, 249);
+            this.stagePartsGroupBox.Size = new System.Drawing.Size(176, 310);
             this.stagePartsGroupBox.TabIndex = 14;
             this.stagePartsGroupBox.TabStop = false;
             this.stagePartsGroupBox.Text = "ステージパーツ";
@@ -122,11 +126,12 @@ namespace ChaseMagStageCreater
             this.flowLayoutPanel1.Controls.Add(this.wallButton);
             this.flowLayoutPanel1.Controls.Add(this.NormalWallButton);
             this.flowLayoutPanel1.Controls.Add(this.itemBoxButton);
+            this.flowLayoutPanel1.Controls.Add(this.poleScaffoldButtom);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(7, 36);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(147, 201);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(147, 246);
             this.flowLayoutPanel1.TabIndex = 15;
             // 
             // scaffoldButton
@@ -188,6 +193,17 @@ namespace ChaseMagStageCreater
             this.itemBoxButton.TabStop = true;
             this.itemBoxButton.Text = "アイテム箱";
             this.itemBoxButton.UseVisualStyleBackColor = true;
+            // 
+            // poleScaffoldButtom
+            // 
+            this.poleScaffoldButtom.AutoSize = true;
+            this.poleScaffoldButtom.Location = new System.Drawing.Point(3, 198);
+            this.poleScaffoldButtom.Name = "poleScaffoldButtom";
+            this.poleScaffoldButtom.Size = new System.Drawing.Size(91, 31);
+            this.poleScaffoldButtom.TabIndex = 5;
+            this.poleScaffoldButtom.TabStop = true;
+            this.poleScaffoldButtom.Text = "磁力床";
+            this.poleScaffoldButtom.UseVisualStyleBackColor = true;
             // 
             // partsListBox
             // 
@@ -422,7 +438,7 @@ namespace ChaseMagStageCreater
             this.stageSizeGroup.Controls.Add(this.heightLabel);
             this.stageSizeGroup.Controls.Add(this.widthSize);
             this.stageSizeGroup.Controls.Add(this.heightSize);
-            this.stageSizeGroup.Location = new System.Drawing.Point(12, 431);
+            this.stageSizeGroup.Location = new System.Drawing.Point(12, 492);
             this.stageSizeGroup.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.stageSizeGroup.Name = "stageSizeGroup";
             this.stageSizeGroup.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -430,7 +446,6 @@ namespace ChaseMagStageCreater
             this.stageSizeGroup.TabIndex = 28;
             this.stageSizeGroup.TabStop = false;
             this.stageSizeGroup.Text = "ステージサイズ";
-            this.stageSizeGroup.Visible = false;
             // 
             // widthLabel
             // 
@@ -480,7 +495,8 @@ namespace ChaseMagStageCreater
             this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ファイルFToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.modToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(10, 4, 0, 4);
@@ -488,18 +504,18 @@ namespace ChaseMagStageCreater
             this.menuStrip1.TabIndex = 30;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // ファイルFToolStripMenuItem
+            // fileToolStripMenuItem
             // 
-            this.ファイルFToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CreateNewFileToolStripMenuItem,
             this.OpenFileToolStripMenuItem,
             this.OverWriteToolStripMenuItem,
             this.SaveFileToolStripMenuItem,
             this.toolStripMenuItem1,
             this.ExitAppToolStripMenuItem});
-            this.ファイルFToolStripMenuItem.Name = "ファイルFToolStripMenuItem";
-            this.ファイルFToolStripMenuItem.Size = new System.Drawing.Size(98, 29);
-            this.ファイルFToolStripMenuItem.Text = "ファイル(&F)";
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(98, 29);
+            this.fileToolStripMenuItem.Text = "ファイル(&F)";
             // 
             // CreateNewFileToolStripMenuItem
             // 
@@ -540,6 +556,21 @@ namespace ChaseMagStageCreater
             this.ExitAppToolStripMenuItem.Size = new System.Drawing.Size(279, 34);
             this.ExitAppToolStripMenuItem.Text = "終了(&X)";
             // 
+            // modToolStripMenuItem
+            // 
+            this.modToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.allDeleteToolStripMenuItem});
+            this.modToolStripMenuItem.Name = "modToolStripMenuItem";
+            this.modToolStripMenuItem.Size = new System.Drawing.Size(64, 29);
+            this.modToolStripMenuItem.Text = "編集";
+            // 
+            // allDeleteToolStripMenuItem
+            // 
+            this.allDeleteToolStripMenuItem.Name = "allDeleteToolStripMenuItem";
+            this.allDeleteToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.allDeleteToolStripMenuItem.Text = "すべて削除";
+            this.allDeleteToolStripMenuItem.Click += new System.EventHandler(this.AllDeleteToolStripMenuItem_Click);
+            // 
             // deleteButton
             // 
             this.deleteButton.Location = new System.Drawing.Point(1082, 626);
@@ -575,7 +606,7 @@ namespace ChaseMagStageCreater
             // 
             this.msgText.AutoSize = true;
             this.msgText.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.msgText.Location = new System.Drawing.Point(9, 658);
+            this.msgText.Location = new System.Drawing.Point(189, 684);
             this.msgText.Name = "msgText";
             this.msgText.Size = new System.Drawing.Size(46, 27);
             this.msgText.TabIndex = 34;
@@ -610,7 +641,7 @@ namespace ChaseMagStageCreater
             // playerViewCheckBox
             // 
             this.playerViewCheckBox.AutoSize = true;
-            this.playerViewCheckBox.Location = new System.Drawing.Point(12, 614);
+            this.playerViewCheckBox.Location = new System.Drawing.Point(12, 680);
             this.playerViewCheckBox.Name = "playerViewCheckBox";
             this.playerViewCheckBox.Size = new System.Drawing.Size(131, 31);
             this.playerViewCheckBox.TabIndex = 36;
@@ -656,7 +687,7 @@ namespace ChaseMagStageCreater
             // addModeButtom
             // 
             this.addModeButtom.AutoSize = true;
-            this.addModeButtom.Location = new System.Drawing.Point(10, 33);
+            this.addModeButtom.Location = new System.Drawing.Point(10, 29);
             this.addModeButtom.Name = "addModeButtom";
             this.addModeButtom.Size = new System.Drawing.Size(73, 31);
             this.addModeButtom.TabIndex = 42;
@@ -667,7 +698,7 @@ namespace ChaseMagStageCreater
             // viewMoveModeButton
             // 
             this.viewMoveModeButton.AutoSize = true;
-            this.viewMoveModeButton.Location = new System.Drawing.Point(10, 66);
+            this.viewMoveModeButton.Location = new System.Drawing.Point(10, 62);
             this.viewMoveModeButton.Name = "viewMoveModeButton";
             this.viewMoveModeButton.Size = new System.Drawing.Size(109, 31);
             this.viewMoveModeButton.TabIndex = 43;
@@ -676,14 +707,26 @@ namespace ChaseMagStageCreater
             // 
             // mode
             // 
+            this.mode.Controls.Add(this.selectModeButtom);
             this.mode.Controls.Add(this.viewMoveModeButton);
             this.mode.Controls.Add(this.addModeButtom);
-            this.mode.Location = new System.Drawing.Point(12, 56);
+            this.mode.Location = new System.Drawing.Point(12, 40);
             this.mode.Name = "mode";
-            this.mode.Size = new System.Drawing.Size(155, 103);
+            this.mode.Size = new System.Drawing.Size(176, 127);
             this.mode.TabIndex = 44;
             this.mode.TabStop = false;
             this.mode.Text = "モード";
+            // 
+            // selectModeButtom
+            // 
+            this.selectModeButtom.AutoSize = true;
+            this.selectModeButtom.Location = new System.Drawing.Point(10, 96);
+            this.selectModeButtom.Name = "selectModeButtom";
+            this.selectModeButtom.Size = new System.Drawing.Size(73, 31);
+            this.selectModeButtom.TabIndex = 44;
+            this.selectModeButtom.TabStop = true;
+            this.selectModeButtom.Text = "選択";
+            this.selectModeButtom.UseVisualStyleBackColor = true;
             // 
             // CreateStageForm
             // 
@@ -712,6 +755,7 @@ namespace ChaseMagStageCreater
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "CreateStageForm";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CreateStageForm_FormClosing);
             this.Load += new System.EventHandler(this.CreateStageForm_Load);
             this.stagePartsGroupBox.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
@@ -768,7 +812,7 @@ namespace ChaseMagStageCreater
         private System.Windows.Forms.Label heightLabel;
         private System.Windows.Forms.NumericUpDown widthSize;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem ファイルFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CreateNewFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OpenFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SaveFileToolStripMenuItem;
@@ -792,6 +836,10 @@ namespace ChaseMagStageCreater
         private System.Windows.Forms.RadioButton addModeButtom;
         private System.Windows.Forms.RadioButton viewMoveModeButton;
         private System.Windows.Forms.GroupBox mode;
+        private System.Windows.Forms.RadioButton poleScaffoldButtom;
+        private System.Windows.Forms.RadioButton selectModeButtom;
+        private System.Windows.Forms.ToolStripMenuItem modToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allDeleteToolStripMenuItem;
     }
 }
 

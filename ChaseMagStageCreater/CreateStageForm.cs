@@ -77,6 +77,18 @@ namespace ChaseMagStageCreater
 
             ViewUpdate();
         }
+        // 終了時
+        private void CreateStageForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MessageBox.Show(
+              "終了してもいいですか？", "確認",
+              MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                ) == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
+        }
+
 
         // ********************************************************
         // ファイル操作のメソッド群
@@ -169,6 +181,8 @@ namespace ChaseMagStageCreater
         }
 
         #endregion
+
+
 
 
         // ********************************************************
@@ -319,9 +333,8 @@ namespace ChaseMagStageCreater
                 return;
             }
 
-            ViewDataClear();
-
             stageDataManager.DeletePart(partsListBox.SelectedIndex);
+            ViewDataClear();
 
             msgText.Text = (partsListBox.SelectedIndex+1).ToString() + "削除しました";
 
@@ -329,6 +342,31 @@ namespace ChaseMagStageCreater
 
         }
 
+        // すべてのパーツを削除する
+        private void AllDeleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show(
+                  "すべてのパーツを削除しますか？", "確認",
+                  MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                    ) == DialogResult.No)
+            {
+                return;
+            }
+
+            // 後ろから回す
+            for (int i = stageDataManager.GetPartsCouont()-1; i >= 0; i--)
+            {
+                stageDataManager.DeletePart(i);
+
+            }
+            ViewDataClear();
+
+            msgText.Text = "削除しました";
+
+            ViewUpdate();
+
+
+        }
 
         // ********************************************************
         // フォーム上からの値変更
@@ -399,7 +437,12 @@ namespace ChaseMagStageCreater
         {
             int index = stageDataManager.pictures.IndexOf((PictureBox)sender);
             partsListBox.SelectedIndex = index;
+            if (selectModeButtom.Checked)
+            {
+                return;
+            }
             dragPictureIndex = index;
+
         }
 
         // ドラッグでパーツを移動させる
@@ -430,6 +473,10 @@ namespace ChaseMagStageCreater
         // パーツの移動終了
         private void StagePartMouseUp(object sender, EventArgs e)
         {
+            if (selectModeButtom.Checked)
+            {
+                return;
+            }
             // データへ反映する
             stageDataManager.PictureLocationApply((PictureBox)sender);
             SetViewPartData(stageDataManager.GetPart((PictureBox)sender));
@@ -444,10 +491,15 @@ namespace ChaseMagStageCreater
         // ホイールでズームする
         private void InStagePicture_MouseWheel(object sender, MouseEventArgs e)
         {
-            zoomManager.ZoomChange(e.Delta);
+            bool zoomIn = e.Delta > 0;
+            if (zoomIn && !CanZoom())
+            {
+                return;
+            }
+            zoomManager.ZoomChange(zoomIn);
             PictureViewReflesh();
-            
-            
+
+
         }
 
         // ********************************************************
@@ -476,6 +528,11 @@ namespace ChaseMagStageCreater
             stagePictureLocation.Offset(-(int)(maxStagePictureSize.Width * 0.5f), -(int)(maxStagePictureSize.Height * 0.5f));
             InStagePicture.Location = stagePictureLocation;
             zoomManager.ResetZoom(new Vector2(InStagePicture.Size.Width, InStagePicture.Size.Height));
+
+            // パーツの位置がステージ外へ出ないように
+            positionX.Maximum = (decimal)(stageDataManager.stageData.width * 0.5f);
+            positionX.Minimum = (decimal)(-stageDataManager.stageData.width * 0.5f);
+            positionY.Maximum = (decimal)stageDataManager.stageData.height;
 
             PictureViewReflesh();
 
@@ -552,11 +609,24 @@ namespace ChaseMagStageCreater
 
         }
 
+
+        // ********************************************************
+        // チェック
+        // ********************************************************
+
         // リストの添え字が範囲外か
         private bool IndexOutOfRange()
         {
             return partsListBox.SelectedIndex < 0 || partsListBox.SelectedIndex >= stageDataManager.GetPartsCouont();
         }
+
+        // ズームできるステージの大きさか
+        private bool CanZoom()
+        {
+            return InStagePicture.Height * zoomManager.maxZoomValue < stageBox.Height - insideStageMargin * 2.0f;
+        }
+
+
     }
 
 

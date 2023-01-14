@@ -24,6 +24,7 @@ namespace ChaseMagStageCreater
             categoryImageDatas.Add(StagePartsCategory.NormalWall, new PictureBoxData(new Vector2(4, 30), Properties.Resources.floor, BasePoint.Bottom));
             categoryImageDatas.Add(StagePartsCategory.JumpRamp, new PictureBoxData(new Vector2(4, 2.5f), Properties.Resources.jumpRampNorth, Properties.Resources.jumpRampSouth, BasePoint.Bottom));
             categoryImageDatas.Add(StagePartsCategory.ItemBox, new PictureBoxData(new Vector2(4, 2.5f), Properties.Resources.itemBox, BasePoint.Bottom));
+            categoryImageDatas.Add(StagePartsCategory.PoleScaffold, new PictureBoxData(new Vector2(10, 1), Properties.Resources.wallNorth, Properties.Resources.wallSouth, BasePoint.Bottom));
 
         }
 
