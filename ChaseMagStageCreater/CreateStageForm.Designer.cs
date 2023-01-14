@@ -430,6 +430,7 @@ namespace ChaseMagStageCreater
             this.stageSizeGroup.TabIndex = 28;
             this.stageSizeGroup.TabStop = false;
             this.stageSizeGroup.Text = "ステージサイズ";
+            this.stageSizeGroup.Visible = false;
             // 
             // widthLabel
             // 
@@ -615,7 +616,6 @@ namespace ChaseMagStageCreater
             this.playerViewCheckBox.TabIndex = 36;
             this.playerViewCheckBox.Text = "checkBox1";
             this.playerViewCheckBox.UseVisualStyleBackColor = true;
-            this.playerViewCheckBox.CheckedChanged += new System.EventHandler(this.playerViewCheckBox_CheckedChanged);
             // 
             // bottomLeftLabel
             // 

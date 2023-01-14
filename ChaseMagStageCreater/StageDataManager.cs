@@ -31,15 +31,25 @@ namespace ChaseMagStageCreater
         // 倍率
         public float magnification { get; set; }
 
+        // ズームマネージャー
+        private ZoomManager zoomManager;
 
-        public StageDataManager(float width, float height, PictureBox stage)
+        // ドラッグイベントを追加するメソッド
+        private Action<PictureBox> addEventAction;
+
+
+
+        public StageDataManager(float width, float height, PictureBox stage, ZoomManager zoomManager, Action<PictureBox> addEventAction)
         {
             stageData = new StageData();
             stageData.width = width;
             stageData.height = height;
             this.stage = stage;
+            this.zoomManager = zoomManager;
+
             pictures = new List<PictureBox>();
             pictureBoxDataManager = new PictureBoxDataManager();
+            this.addEventAction = addEventAction;
 
         }
 
@@ -99,20 +109,14 @@ namespace ChaseMagStageCreater
             Size size = new Size((int)Math.Round(pictureSize.x * magnification * part.sizeMagnification.x),
                 (int)Math.Round(pictureSize.y * magnification * part.sizeMagnification.y));
             // 位置の設定
-            //Point location = stage.Location;
-
-            //location.Offset((int)Math.Round(stage.Size.Width / 2.0f), stage.Size.Height);
-
-            //Vector2 position = new Vector2(part.position.x * magnification, -part.position.y * magnification);
             Point location =
             LocationConverter.StagePositionToLocation(part.position, size, pictureBoxDataManager.GetBasePoint(part.category), GetBasePoint(stage), magnification);
-            // **********************************************************zoom未実装
-            //location.Offset((int)(zoomManager.zoomLocation), 0);
+            location.Offset((int)(zoomManager.zoomLocation), 0);
 
             picture.Location = location;
             picture.Size = size;
 
-
+            // 画像の設定
             if (StagePart.IsSetPole(part.category) && !part.isNorth)
             {
                 picture.BackgroundImage = pictureBoxDataManager.GetBitmap(part.category, Pole.South);
@@ -120,50 +124,31 @@ namespace ChaseMagStageCreater
             else
             {
                 picture.BackgroundImage = pictureBoxDataManager.GetBitmap(part.category,Pole.North);
-
             }
 
             picture.BackgroundImageLayout = ImageLayout.Stretch;
-            /*
-            picture.MouseDown += StagePartMouseDown;
-            picture.MouseUp += StagePartMouseUp;
-            picture.MouseMove += StagePartMouseMove;
-            */
-            if (!StageOfRangeIn(picture,stage))
-            {
-                //picture.Visible = false;
 
+            // ドラッグイベントの追加
+            if (addEventAction != null)
+            {
+                addEventAction.Invoke(picture);
             }
-            /*
-            if (location.X < stage.Location.X || location.X + pictureSize.Width > stage.Location.X + stage.Width)
+            
+            if (!StageOfRangeIn(picture,stage))
             {
                 picture.Visible = false;
 
             }
-            */
 
+            // 追加処理
             pictures.Add(picture);
             controls.Add(picture);
             picture.BringToFront();
 
-
         }
 
-        public void SelectedPicture(int index)
-        {
-            pictures[index].Image = Properties.Resources.SelectMask;
-        }
 
-        // 指定したインデックスのパーツのデータを更新する
-        public void UpdatePartData(StagePart part, int index)
-        {
-            stageData.stageParts[index].position = part.position;
-            stageData.stageParts[index].sizeMagnification = part.sizeMagnification;
-            stageData.stageParts[index].isNorth = part.isNorth;
-            // いる？
-            pictures[index].Image = null;
-        }
-
+        // 大きさの更新
         public void UpdateSize(int index , Vector2 value)
         {
             stageData.stageParts[index].sizeMagnification = value;
@@ -175,26 +160,18 @@ namespace ChaseMagStageCreater
             Size size = new Size((int)Math.Round(pictureSize.x * magnification * part.sizeMagnification.x),
                 (int)Math.Round(pictureSize.y * magnification * part.sizeMagnification.y));
             pictures[index].Size = size;
-            pictures[index].Location =
-                LocationConverter.StagePositionToLocation(
-                    value,
-                    pictures[index].Size,
-                    pictureBoxDataManager.GetBasePoint(stageData.stageParts[index].category),
-                    GetBasePoint(stage), magnification);
+            SetPicturePosition(index);
         }
 
+        // 位置の更新
         public void UpdatePosition(int index, Vector2 value)
         {
             stageData.stageParts[index].position = value;
-            pictures[index].Location = 
-                LocationConverter.StagePositionToLocation(
-                    value,
-                    pictures[index].Size, 
-                    pictureBoxDataManager.GetBasePoint(stageData.stageParts[index].category), 
-                    GetBasePoint(stage), magnification);
+            SetPicturePosition(index);
 
         }
 
+        // 磁力の向きの更新
         public void UpdatePole(int index, bool isNorth)
         {
             stageData.stageParts[index].isNorth = isNorth;
@@ -211,25 +188,66 @@ namespace ChaseMagStageCreater
             
         }
 
+        // 選択状態をわかりやすくする
+        public void SelectedPicture(int index)
+        {
+            pictures[index].Image = Properties.Resources.SelectMask;
+        }
+
+        // 選択状態を解除
+        internal void DeSelected(int preIndex)
+        {
+            if (preIndex >= 0&& preIndex < pictures.Count)
+            {
+                pictures[preIndex].Image = null;
+            }
+        }
+
         // 移動させたピクチャーボックスの位置をデータとして反映させる
         public void PictureLocationApply(PictureBox partPicture)
         {
-            //partLocation.Offset(-(int)zoomManager.zoomLocation, 0);
-           int index = pictures.IndexOf(partPicture);
+            int index = pictures.IndexOf(partPicture);
+            Point partLocation = pictures[index].Location;
+            partLocation.Offset(-(int)zoomManager.zoomLocation, 0);
             // 位置のセット
             stageData.stageParts[index].position = 
                 LocationConverter.LocationToStagePosition(
-                pictures[index].Location,
+                partLocation,
                 pictures[index].Size,
                 pictureBoxDataManager.GetBasePoint(stageData.stageParts[index].category),
                 GetBasePoint(stage), magnification);
+            SetPicturePosition(index);
             
+        }
+
+        // 指定したインデックスのピクチャーボックスの位置をデータ通りに更新する
+        private void SetPicturePosition(int index)
+        {
+            Point partLocation =
+                LocationConverter.StagePositionToLocation(
+                    stageData.stageParts[index].position,
+                    pictures[index].Size,
+                    pictureBoxDataManager.GetBasePoint(stageData.stageParts[index].category),
+                    GetBasePoint(stage), magnification);
+            partLocation.Offset((int)zoomManager.zoomLocation, 0);
+            pictures[index].Location = partLocation;
+        }
+
+        // パーツの取得
+        public StagePart GetPart(int index)
+        {
+            return stageData.stageParts[index];
         }
 
         public StagePart GetPart(PictureBox partPicture)
         {
             int index = pictures.IndexOf(partPicture);
             return stageData.stageParts[index];
+        }
+
+        public int GetPartsCouont()
+        {
+            return stageData.stageParts.Count;
         }
 
         //*******************************************************************************************
@@ -265,13 +283,6 @@ namespace ChaseMagStageCreater
             return location;
         }
 
-
-        public static Point ToCenter(PictureBox pictureBox)
-        {
-            Point location = pictureBox.Location;
-            location.Offset(-(int)Math.Round(pictureBox.Width * 0.5f),-(int)Math.Round(pictureBox.Height * 0.5f));
-            return location;
-        }
 
     }
 

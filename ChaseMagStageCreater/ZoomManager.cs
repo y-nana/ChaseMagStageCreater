@@ -22,6 +22,7 @@ namespace ChaseMagStageCreater
 
         private readonly float defaultPercent = 1.0f;
 
+        private readonly float moveValue = 20;
 
         public ZoomManager(Vector2 baseStageSize)
         {
@@ -81,16 +82,23 @@ namespace ChaseMagStageCreater
         }
          
         // ズーム中の視点を変更する
-        public void ChangeFocus(int value)
+        public void ChangeFocus(bool isRight)
         {
             if (!isZoomed)
             {
                 return;
             }
 
+            if (isRight)
+            {
+                zoomLocation -= moveValue;
+            }
+            else
+            {
+                zoomLocation += moveValue;
+            }
 
-
-            zoomLocation += value;
+            // 表示範囲外まで移動しないようにする
             if (zoomLocation > (viewStagePictureSize.x - baseStageSize.x) * 0.5f)
             {
                 zoomLocation = (viewStagePictureSize.x - baseStageSize.x) * 0.5f;

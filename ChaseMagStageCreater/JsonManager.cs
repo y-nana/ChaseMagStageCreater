@@ -13,9 +13,21 @@ namespace ChaseMagStageCreater
     class JsonManager
     {
 
-        public static void InportData()
+        // ファイルからインポート
+        public static StageData ImportData(string filePath)
         {
+            StreamReader reader = new StreamReader(filePath);
+            string datastr = reader.ReadToEnd();
+            reader.Close();
+            // jsonからデシリアライズ
+            var options = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                WriteIndented = true
+            };
+            StageData data = JsonSerializer.Deserialize<StageData>(datastr, options);
 
+            return data;
         }
 
         public static void ExportData(string path, StageData data)
