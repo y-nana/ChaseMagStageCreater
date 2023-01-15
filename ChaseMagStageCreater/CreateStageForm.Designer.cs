@@ -85,6 +85,7 @@ namespace ChaseMagStageCreater
             this.viewMoveModeButton = new System.Windows.Forms.RadioButton();
             this.mode = new System.Windows.Forms.GroupBox();
             this.partsMoveModeButtom = new System.Windows.Forms.RadioButton();
+            this.clipRadioButton = new System.Windows.Forms.RadioButton();
             this.stagePartsGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.positionX)).BeginInit();
@@ -114,7 +115,7 @@ namespace ChaseMagStageCreater
             this.stagePartsGroupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.stagePartsGroupBox.Name = "stagePartsGroupBox";
             this.stagePartsGroupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.stagePartsGroupBox.Size = new System.Drawing.Size(176, 266);
+            this.stagePartsGroupBox.Size = new System.Drawing.Size(176, 316);
             this.stagePartsGroupBox.TabIndex = 14;
             this.stagePartsGroupBox.TabStop = false;
             this.stagePartsGroupBox.Text = "ステージパーツ";
@@ -127,11 +128,12 @@ namespace ChaseMagStageCreater
             this.flowLayoutPanel1.Controls.Add(this.NormalWallButton);
             this.flowLayoutPanel1.Controls.Add(this.itemBoxButton);
             this.flowLayoutPanel1.Controls.Add(this.poleScaffoldButtom);
+            this.flowLayoutPanel1.Controls.Add(this.clipRadioButton);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(7, 36);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(147, 234);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(147, 276);
             this.flowLayoutPanel1.TabIndex = 15;
             // 
             // scaffoldButton
@@ -214,7 +216,7 @@ namespace ChaseMagStageCreater
             this.partsListBox.Location = new System.Drawing.Point(950, 93);
             this.partsListBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.partsListBox.Name = "partsListBox";
-            this.partsListBox.Size = new System.Drawing.Size(223, 112);
+            this.partsListBox.Size = new System.Drawing.Size(223, 139);
             this.partsListBox.TabIndex = 16;
             this.partsListBox.SelectedIndexChanged += new System.EventHandler(this.partsListBox_SelectedIndexChanged);
             // 
@@ -441,7 +443,7 @@ namespace ChaseMagStageCreater
             this.stageSizeGroup.Controls.Add(this.heightLabel);
             this.stageSizeGroup.Controls.Add(this.widthSize);
             this.stageSizeGroup.Controls.Add(this.heightSize);
-            this.stageSizeGroup.Location = new System.Drawing.Point(12, 455);
+            this.stageSizeGroup.Location = new System.Drawing.Point(12, 498);
             this.stageSizeGroup.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.stageSizeGroup.Name = "stageSizeGroup";
             this.stageSizeGroup.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -617,7 +619,7 @@ namespace ChaseMagStageCreater
             // 
             this.msgText.AutoSize = true;
             this.msgText.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.msgText.Location = new System.Drawing.Point(12, 641);
+            this.msgText.Location = new System.Drawing.Point(12, 681);
             this.msgText.Name = "msgText";
             this.msgText.Size = new System.Drawing.Size(46, 27);
             this.msgText.TabIndex = 34;
@@ -746,11 +748,22 @@ namespace ChaseMagStageCreater
             this.partsMoveModeButtom.Text = "パーツ移動(E)";
             this.partsMoveModeButtom.UseVisualStyleBackColor = true;
             // 
+            // clipRadioButton
+            // 
+            this.clipRadioButton.AutoSize = true;
+            this.clipRadioButton.Location = new System.Drawing.Point(3, 235);
+            this.clipRadioButton.Name = "clipRadioButton";
+            this.clipRadioButton.Size = new System.Drawing.Size(109, 31);
+            this.clipRadioButton.TabIndex = 45;
+            this.clipRadioButton.TabStop = true;
+            this.clipRadioButton.Text = "クリップ";
+            this.clipRadioButton.UseVisualStyleBackColor = true;
+            // 
             // CreateStageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 27F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 684);
+            this.ClientSize = new System.Drawing.Size(1200, 717);
             this.Controls.Add(this.mode);
             this.Controls.Add(this.topleftLabel);
             this.Controls.Add(this.topRightLabel);
@@ -861,6 +874,7 @@ namespace ChaseMagStageCreater
         private System.Windows.Forms.RadioButton partsMoveModeButtom;
         private System.Windows.Forms.ToolStripMenuItem modToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allDeleteToolStripMenuItem;
+        private System.Windows.Forms.RadioButton clipRadioButton;
     }
 }
 

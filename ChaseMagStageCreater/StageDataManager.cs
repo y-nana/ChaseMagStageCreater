@@ -127,6 +127,7 @@ namespace ChaseMagStageCreater
             }
 
             picture.BackgroundImageLayout = ImageLayout.Stretch;
+            picture.BackColor = Color.White;
 
             // ドラッグイベントの追加
             if (addEventAction != null)

@@ -14,7 +14,8 @@ namespace ChaseMagStageCreater
         Wall,
         NormalWall,
         ItemBox,
-        PoleScaffold
+        PoleScaffold,
+        Clip
     }
     // ステージ内のオブジェクトのデータ
     public class StagePart

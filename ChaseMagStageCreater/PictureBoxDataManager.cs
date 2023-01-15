@@ -11,7 +11,7 @@ namespace ChaseMagStageCreater
     {
 
         private Dictionary<StagePartsCategory, PictureBoxData> categoryImageDatas;
-
+        // unityはpixelの100分の1
         private readonly float pixelMagnification = 0.01f;
 
 
@@ -25,6 +25,7 @@ namespace ChaseMagStageCreater
             categoryImageDatas.Add(StagePartsCategory.JumpRamp, new PictureBoxData(new Vector2(4, 2.5f), Properties.Resources.jumpRampNorth, Properties.Resources.jumpRampSouth, BasePoint.Bottom));
             categoryImageDatas.Add(StagePartsCategory.ItemBox, new PictureBoxData(new Vector2(4, 2.5f), Properties.Resources.itemBox, BasePoint.Bottom));
             categoryImageDatas.Add(StagePartsCategory.PoleScaffold, new PictureBoxData(new Vector2(10, 1), Properties.Resources.wallNorth, Properties.Resources.wallSouth, BasePoint.Bottom));
+            categoryImageDatas.Add(StagePartsCategory.Clip, new PictureBoxData(new Vector2(0.6f, 0.6f), Properties.Resources.clip, BasePoint.Center));
 
         }
 
