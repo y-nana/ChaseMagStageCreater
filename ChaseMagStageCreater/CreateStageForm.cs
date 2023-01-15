@@ -501,9 +501,9 @@ namespace ChaseMagStageCreater
             Point mouseLocation = PointToClient(MousePosition);
             // ドラッグでステージ外へ出せないように
             if (mouseLocation.X < InStagePicture.Location.X ||
-                mouseLocation.X + stageDataManager.pictures[dragPictureIndex].Width > InStagePicture.Location.X + InStagePicture.Size.Width||
+                mouseLocation.X + stageDataManager.pictures[dragPictureIndex].Width * 0.5f > InStagePicture.Location.X + InStagePicture.Size.Width||
                 mouseLocation.Y < InStagePicture.Location.Y || 
-                mouseLocation.Y + stageDataManager.pictures[dragPictureIndex].Height> InStagePicture.Location.Y + InStagePicture.Size.Height)
+                mouseLocation.Y + stageDataManager.pictures[dragPictureIndex].Height * 0.5f> InStagePicture.Location.Y + InStagePicture.Size.Height)
             {
                 return;
             }
@@ -541,7 +541,7 @@ namespace ChaseMagStageCreater
         private void InStagePicture_MouseWheel(object sender, MouseEventArgs e)
         {
             bool zoomIn = e.Delta > 0;
-            if (zoomIn && !CanZoom())
+            if (zoomIn && (!CanZoom()||zoomManager.isZoomed))
             {
                 return;
             }
@@ -677,6 +677,7 @@ namespace ChaseMagStageCreater
         // ズームできるステージの大きさか
         private bool CanZoom()
         {
+
             return InStagePicture.Height * zoomManager.maxZoomValue < stageBox.Height - insideStageMargin * 2.0f;
         }
 
@@ -707,6 +708,16 @@ namespace ChaseMagStageCreater
 
         }
 
+        private void CreateStageForm_SizeChanged(object sender, EventArgs e)
+        {
+            // フォーム上でステージとして見せるピクチャーボックスの最大サイズを算出
+            maxStagePictureSize = new Size(stageBox.Size.Width - insideStageMargin * 2, stageBox.Size.Height - insideStageMargin * 2);
+            // ステージのピクチャーボックスの縦横比を算出
+            stageBoxRatio = maxStagePictureSize.Width / (float)maxStagePictureSize.Height;
+            Size_ValueChanged(sender,e);
+            msgText.Text = "changed";
+
+        }
     }
 
 

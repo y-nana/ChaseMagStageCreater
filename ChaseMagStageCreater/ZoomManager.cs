@@ -50,10 +50,10 @@ namespace ChaseMagStageCreater
             }
             else if(deltaWheel < 0)
             {
-                isZoomed = false;
                 zoomValue -= wheelPercentValue;
                 if (zoomValue < defaultPercent)
                 {
+                    isZoomed = false;
                     zoomValue = defaultPercent;
                 }
 

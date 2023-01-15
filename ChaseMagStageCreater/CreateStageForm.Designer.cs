@@ -114,7 +114,7 @@ namespace ChaseMagStageCreater
             this.stagePartsGroupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.stagePartsGroupBox.Name = "stagePartsGroupBox";
             this.stagePartsGroupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.stagePartsGroupBox.Size = new System.Drawing.Size(176, 310);
+            this.stagePartsGroupBox.Size = new System.Drawing.Size(176, 266);
             this.stagePartsGroupBox.TabIndex = 14;
             this.stagePartsGroupBox.TabStop = false;
             this.stagePartsGroupBox.Text = "ステージパーツ";
@@ -131,7 +131,7 @@ namespace ChaseMagStageCreater
             this.flowLayoutPanel1.Location = new System.Drawing.Point(7, 36);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(147, 246);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(147, 234);
             this.flowLayoutPanel1.TabIndex = 15;
             // 
             // scaffoldButton
@@ -207,12 +207,14 @@ namespace ChaseMagStageCreater
             // 
             // partsListBox
             // 
+            this.partsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.partsListBox.FormattingEnabled = true;
             this.partsListBox.ItemHeight = 27;
             this.partsListBox.Location = new System.Drawing.Point(950, 93);
             this.partsListBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.partsListBox.Name = "partsListBox";
-            this.partsListBox.Size = new System.Drawing.Size(223, 220);
+            this.partsListBox.Size = new System.Drawing.Size(223, 139);
             this.partsListBox.TabIndex = 16;
             this.partsListBox.SelectedIndexChanged += new System.EventHandler(this.partsListBox_SelectedIndexChanged);
             // 
@@ -354,6 +356,7 @@ namespace ChaseMagStageCreater
             // 
             // partDataGroup
             // 
+            this.partDataGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.partDataGroup.Controls.Add(this.ySizeLabel);
             this.partDataGroup.Controls.Add(this.xSizeLabel);
             this.partDataGroup.Controls.Add(this.sizeY);
@@ -365,7 +368,7 @@ namespace ChaseMagStageCreater
             this.partDataGroup.Controls.Add(this.polePanel);
             this.partDataGroup.Controls.Add(this.xPosLabel);
             this.partDataGroup.Controls.Add(this.positionLabel);
-            this.partDataGroup.Location = new System.Drawing.Point(952, 326);
+            this.partDataGroup.Location = new System.Drawing.Point(952, 255);
             this.partDataGroup.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.partDataGroup.Name = "partDataGroup";
             this.partDataGroup.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -438,7 +441,7 @@ namespace ChaseMagStageCreater
             this.stageSizeGroup.Controls.Add(this.heightLabel);
             this.stageSizeGroup.Controls.Add(this.widthSize);
             this.stageSizeGroup.Controls.Add(this.heightSize);
-            this.stageSizeGroup.Location = new System.Drawing.Point(12, 492);
+            this.stageSizeGroup.Location = new System.Drawing.Point(12, 455);
             this.stageSizeGroup.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.stageSizeGroup.Name = "stageSizeGroup";
             this.stageSizeGroup.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -577,7 +580,8 @@ namespace ChaseMagStageCreater
             // 
             // deleteButton
             // 
-            this.deleteButton.Location = new System.Drawing.Point(1082, 626);
+            this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteButton.Location = new System.Drawing.Point(1079, 555);
             this.deleteButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(88, 30);
@@ -588,7 +592,8 @@ namespace ChaseMagStageCreater
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(950, 626);
+            this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addButton.Location = new System.Drawing.Point(952, 555);
             this.addButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(92, 30);
@@ -599,6 +604,8 @@ namespace ChaseMagStageCreater
             // 
             // AllPartsLabel
             // 
+            this.AllPartsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.AllPartsLabel.AutoSize = true;
             this.AllPartsLabel.Location = new System.Drawing.Point(947, 62);
             this.AllPartsLabel.Name = "AllPartsLabel";
@@ -610,7 +617,7 @@ namespace ChaseMagStageCreater
             // 
             this.msgText.AutoSize = true;
             this.msgText.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.msgText.Location = new System.Drawing.Point(189, 684);
+            this.msgText.Location = new System.Drawing.Point(12, 641);
             this.msgText.Name = "msgText";
             this.msgText.Size = new System.Drawing.Size(46, 27);
             this.msgText.TabIndex = 34;
@@ -622,6 +629,8 @@ namespace ChaseMagStageCreater
             // 
             // InStagePicture
             // 
+            this.InStagePicture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.InStagePicture.BackColor = System.Drawing.Color.White;
             this.InStagePicture.Location = new System.Drawing.Point(207, 217);
             this.InStagePicture.Name = "InStagePicture";
@@ -636,18 +645,20 @@ namespace ChaseMagStageCreater
             // 
             // stageBox
             // 
+            this.stageBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.stageBox.BackColor = System.Drawing.SystemColors.GrayText;
             this.stageBox.Location = new System.Drawing.Point(194, 56);
             this.stageBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.stageBox.Name = "stageBox";
-            this.stageBox.Size = new System.Drawing.Size(725, 600);
+            this.stageBox.Size = new System.Drawing.Size(725, 572);
             this.stageBox.TabIndex = 15;
             this.stageBox.TabStop = false;
             // 
             // playerViewCheckBox
             // 
             this.playerViewCheckBox.AutoSize = true;
-            this.playerViewCheckBox.Location = new System.Drawing.Point(12, 680);
+            this.playerViewCheckBox.Location = new System.Drawing.Point(950, 616);
             this.playerViewCheckBox.Name = "playerViewCheckBox";
             this.playerViewCheckBox.Size = new System.Drawing.Size(131, 31);
             this.playerViewCheckBox.TabIndex = 36;
@@ -739,7 +750,7 @@ namespace ChaseMagStageCreater
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 27F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 760);
+            this.ClientSize = new System.Drawing.Size(1200, 684);
             this.Controls.Add(this.mode);
             this.Controls.Add(this.topleftLabel);
             this.Controls.Add(this.topRightLabel);
@@ -765,6 +776,7 @@ namespace ChaseMagStageCreater
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CreateStageForm_FormClosing);
             this.Load += new System.EventHandler(this.CreateStageForm_Load);
+            this.SizeChanged += new System.EventHandler(this.CreateStageForm_SizeChanged);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CreateStageForm_KeyDown);
             this.stagePartsGroupBox.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
