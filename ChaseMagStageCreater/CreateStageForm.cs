@@ -32,10 +32,16 @@ namespace ChaseMagStageCreater
         private float stageBoxRatio;                // 最大の縦横比
         private Size maxStagePictureSize;           // ステージのピクチャーボックスの最大サイズ
 
+        private bool isClicked;                     // クリックされた状態か
+        private Point mouseStartPos;                // クリックし始めの位置
+        private float startZoomLocation;            // し始めの位置
+
         private readonly int insideStageMargin = 10;// ステージ外の壁の余白の大きさ
 
         private readonly Vector2 defaultSize = new Vector2(80,20);
-                                                    // ステージサイズの初期値
+        // ステージサイズの初期値
+
+        private readonly string formTitle = "ChaseMag StageCreater";
 
         public CreateStageForm()
         {
@@ -45,7 +51,7 @@ namespace ChaseMagStageCreater
         // 初期化
         private void CreateStageForm_Load(object sender, EventArgs e)
         {
-            this.Text = "ChaseMag StageCreater";
+            this.Text = formTitle;
 
             // 必要なクラスの生成
             zoomManager = new ZoomManager(new Vector2(InStagePicture.Size.Width, InStagePicture.Size.Height));
@@ -77,6 +83,14 @@ namespace ChaseMagStageCreater
 
             ViewUpdate();
         }
+
+        // 終了する
+        private void ExitAppToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+
         // 終了時
         private void CreateStageForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -115,7 +129,7 @@ namespace ChaseMagStageCreater
 
             msgText.Text = openFileDialog1.FileName + "読み込みました";
             nowOpenPath = openFileDialog1.FileName;
-            this.Text += nowOpenPath;
+            this.Text = formTitle + "  " + nowOpenPath;
 
             // 描画の更新処理
             ViewDataClear();
@@ -135,8 +149,6 @@ namespace ChaseMagStageCreater
                 return;
             }
 
-            //PreDataSave();
-
             if (nowOpenPath == string.Empty)
             {
                 saveFileDialog1.Filter = "jsonファイル(*.json)|*.json";
@@ -147,7 +159,7 @@ namespace ChaseMagStageCreater
 
             JsonManager.ExportData(nowOpenPath,stageDataManager.stageData);
             msgText.Text = nowOpenPath + "保存しました";
-            this.Text += "  " + nowOpenPath;
+            this.Text = formTitle + "  " + nowOpenPath;
 
         }
 
@@ -157,7 +169,7 @@ namespace ChaseMagStageCreater
             JsonManager.ExportData(saveFileDialog1.FileName, stageDataManager.stageData);
             nowOpenPath = saveFileDialog1.FileName;
             msgText.Text = nowOpenPath + "保存しました";
-            this.Text += "  " + nowOpenPath;
+            this.Text = formTitle + "  " + nowOpenPath;
 
         }
 
@@ -181,7 +193,6 @@ namespace ChaseMagStageCreater
         }
 
         #endregion
-
 
 
 
@@ -287,37 +298,72 @@ namespace ChaseMagStageCreater
 
 
         // ステージ内をクリックする
-        private void InStagePicture_Click(object sender, EventArgs e)
+        private void InStagePicture_Click(object sender, MouseEventArgs e)
         {
-            // 追加モードだったらパーツを追加する
-            if (addModeButtom.Checked)
+            // 左クリック
+            if (e.Button == MouseButtons.Left)
             {
-                // 位置の調整
-                Point baseLocation = StageDataManager.GetBasePoint(InStagePicture);
-                baseLocation.Offset((int)Math.Round(zoomManager.zoomLocation), 0);
+                // 追加モードだったらパーツを追加する
+                if (addModeButtom.Checked)
+                {
+                    // 位置の調整
+                    Point baseLocation = StageDataManager.GetBasePoint(InStagePicture);
+                    baseLocation.Offset((int)Math.Round(zoomManager.zoomLocation), 0);
 
-                AddStageParts(
-                    LocationConverter.LocationToStagePosition(PointToClient(MousePosition),
-                    baseLocation,
-                    stageDataManager.magnification));
+                    AddStageParts(
+                        LocationConverter.LocationToStagePosition(PointToClient(MousePosition),
+                        baseLocation,
+                        stageDataManager.magnification));
 
+                }
+                // 視点移動モードでズーム中だったら視点を移動する
+                else if (viewMoveModeButton.Checked)
+                {
+
+                    Point mouseLocation = PointToClient(MousePosition);
+
+                    // マウスの位置とステージの中心を比較
+                    bool isRight = mouseLocation.X > InStagePicture.Location.X + InStagePicture.Width * 0.5f;
+                    zoomManager.ChangeFocus(isRight);
+
+                    // 表示の更新
+                    PictureViewReflesh();
+
+                }
             }
-            // 視点移動モードでズーム中だったら視点を移動する
-            else if (viewMoveModeButton.Checked)
+            //右クリック
+            // 視点移動
+
+            else if (e.Button == MouseButtons.Right)
             {
-                Point mouseLocation = PointToClient(MousePosition);
-                
-                // マウスの位置とステージの中心を比較
-                bool isRight = mouseLocation.X > InStagePicture.Location.X + InStagePicture.Width * 0.5f;
-                zoomManager.ChangeFocus(isRight);
-
-                // 表示の更新
-                PictureViewReflesh();
-
+                isClicked = true;
+                startZoomLocation = zoomManager.zoomLocation;
+                mouseStartPos = PointToClient(MousePosition);
             }
+
 
         }
+        // ********************************************************
+        // 視点移動
+        // ********************************************************
+        private void InStagePicture_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isClicked)
+            {
+                Point mousePos = PointToClient(MousePosition);
+                int deltaMove = mousePos.X - mouseStartPos.X;
+                zoomManager.SetForcus(deltaMove + startZoomLocation);
+                msgText.Text = deltaMove.ToString();
+                //PictureViewReflesh();
+            }
+        }
 
+        private void InStagePicture_MouseUp(object sender, MouseEventArgs e)
+        {
+            isClicked = false;
+            PictureViewReflesh();
+
+        }
 
         // ********************************************************
         // 削除処理
@@ -433,20 +479,20 @@ namespace ChaseMagStageCreater
         }
 
         // ドラッグでパーツを移動し始める
-        private void StagePartMouseDown(object sender, EventArgs e)
+        private void StagePartMouseDown(object sender, MouseEventArgs e)
         {
             int index = stageDataManager.pictures.IndexOf((PictureBox)sender);
             partsListBox.SelectedIndex = index;
-            if (selectModeButtom.Checked)
+            if (partsMoveModeButtom.Checked && e.Button == MouseButtons.Left)
             {
-                return;
+                dragPictureIndex = index;
             }
-            dragPictureIndex = index;
+
 
         }
 
         // ドラッグでパーツを移動させる
-        private void StagePartMouseMove(object sender, EventArgs e)
+        private void StagePartMouseMove(object sender, MouseEventArgs e)
         {
             if (dragPictureIndex < 0)
             {
@@ -471,16 +517,20 @@ namespace ChaseMagStageCreater
         }
 
         // パーツの移動終了
-        private void StagePartMouseUp(object sender, EventArgs e)
+        private void StagePartMouseUp(object sender, MouseEventArgs e)
         {
-            if (selectModeButtom.Checked)
+            if (dragPictureIndex < 0)
             {
                 return;
             }
-            // データへ反映する
-            stageDataManager.PictureLocationApply((PictureBox)sender);
-            SetViewPartData(stageDataManager.GetPart((PictureBox)sender));
+            if (partsMoveModeButtom.Checked)
+            {
+                // データへ反映する
+                stageDataManager.PictureLocationApply((PictureBox)sender);
+                SetViewPartData(stageDataManager.GetPart((PictureBox)sender));
+            }
             dragPictureIndex = -1;
+
         }
 
 
@@ -497,6 +547,11 @@ namespace ChaseMagStageCreater
                 return;
             }
             zoomManager.ZoomChange(zoomIn);
+            Point mouseLocation = PointToClient(MousePosition);
+
+            // マウスの位置のところへフォーカス
+            float delta = mouseLocation.X - (InStagePicture.Location.X + InStagePicture.Width * 0.5f);
+            zoomManager.ChangeFocus(-delta);
             PictureViewReflesh();
 
 
@@ -511,7 +566,7 @@ namespace ChaseMagStageCreater
             stageDataManager.stageData.width = (float)widthSize.Value;
             stageDataManager.stageData.height = (float)heightSize.Value;
 
-
+            // 縦と横の比率によってどちらを限界まで伸ばすか決める
             if (stageDataManager.stageData.width >= stageDataManager.stageData.height * stageBoxRatio)
             {
                 stageDataManager.magnification = maxStagePictureSize.Width / stageDataManager.stageData.width;
@@ -626,6 +681,27 @@ namespace ChaseMagStageCreater
             return InStagePicture.Height * zoomManager.maxZoomValue < stageBox.Height - insideStageMargin * 2.0f;
         }
 
+
+        // ********************************************************
+        // ショートカット
+        // ********************************************************
+        // キー入力でモード切替
+        private void CreateStageForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.W:
+                    addModeButtom.Checked = true;
+                    break;
+                case Keys.E:
+                    partsMoveModeButtom.Checked = true;
+                    break;
+                case Keys.R:
+                    viewMoveModeButton.Checked = true;
+                    break;
+            }
+
+        }
 
     }
 

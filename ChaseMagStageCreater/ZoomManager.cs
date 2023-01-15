@@ -111,29 +111,52 @@ namespace ChaseMagStageCreater
 
             if (isRight)
             {
-                zoomLocation -= moveValue;
+                ChangeFocus(-moveValue);
             }
             else
             {
-                zoomLocation += moveValue;
+                ChangeFocus(moveValue);
             }
 
+            
+        }
+
+        public void ChangeFocus(float value)
+        {
+            if (!isZoomed)
+            {
+                return;
+            }
+
+            zoomLocation += value;
+
+            CheckRange();
+        }
+
+        public void SetForcus(float value)
+        {
+            if (!isZoomed)
+            {
+                return;
+            }
+
+            zoomLocation = value;
+            CheckRange();
+
+        }
+        private void CheckRange()
+        {
             // 表示範囲外まで移動しないようにする
             if (zoomLocation > (viewStagePictureSize.x - baseStageSize.x) * 0.5f)
             {
                 zoomLocation = (viewStagePictureSize.x - baseStageSize.x) * 0.5f;
             }
-            else if(zoomLocation < -(viewStagePictureSize.x - baseStageSize.x) * 0.5f)
+            else if (zoomLocation < -(viewStagePictureSize.x - baseStageSize.x) * 0.5f)
             {
                 zoomLocation = -(viewStagePictureSize.x - baseStageSize.x) * 0.5f;
 
             }
-
-
-
         }
-
-
 
 
 
