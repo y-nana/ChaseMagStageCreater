@@ -248,7 +248,7 @@ namespace ChaseMagStageCreater
             partsListBox.Items.Clear();
             for (int i = 0; i < stageDataManager.GetPartsCouont(); i++)
             {
-                partsListBox.Items.Add((i + 1).ToString() + stageDataManager.GetPart(i).category.ToString());
+                partsListBox.Items.Add((i + 1).ToString() +" "+ stageDataManager.GetPart(i).category.ToString());
             }
 
             heightSize.Value = (decimal)stageDataManager.stageData.height;
@@ -333,7 +333,6 @@ namespace ChaseMagStageCreater
             }
             //右クリック
             // 視点移動
-
             else if (e.Button == MouseButtons.Right)
             {
                 isClicked = true;
@@ -353,7 +352,7 @@ namespace ChaseMagStageCreater
                 Point mousePos = PointToClient(MousePosition);
                 int deltaMove = mousePos.X - mouseStartPos.X;
                 zoomManager.SetForcus(deltaMove + startZoomLocation);
-                msgText.Text = deltaMove.ToString();
+                // 不安定
                 //PictureViewReflesh();
             }
         }
@@ -375,7 +374,7 @@ namespace ChaseMagStageCreater
             
             if (IndexOutOfRange())
             {
-                msgText.Text = "リストから削除する項目を選択してください";
+                msgText.Text = "削除するパーツを選択してください";
                 return;
             }
 
@@ -685,7 +684,7 @@ namespace ChaseMagStageCreater
         // ********************************************************
         // ショートカット
         // ********************************************************
-        // キー入力でモード切替
+        // キー入力でモード切替、パーツ削除
         private void CreateStageForm_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
@@ -698,6 +697,11 @@ namespace ChaseMagStageCreater
                     break;
                 case Keys.R:
                     viewMoveModeButton.Checked = true;
+                    break;
+                case Keys.Delete:
+                case Keys.Back:
+                    DeleteButton_Click(sender,e);
+
                     break;
             }
 

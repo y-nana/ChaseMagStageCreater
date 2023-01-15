@@ -653,6 +653,7 @@ namespace ChaseMagStageCreater
             this.playerViewCheckBox.TabIndex = 36;
             this.playerViewCheckBox.Text = "checkBox1";
             this.playerViewCheckBox.UseVisualStyleBackColor = true;
+            this.playerViewCheckBox.Visible = false;
             // 
             // bottomLeftLabel
             // 
