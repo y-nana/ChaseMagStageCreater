@@ -214,7 +214,7 @@ namespace ChaseMagStageCreater
             this.partsListBox.Location = new System.Drawing.Point(950, 93);
             this.partsListBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.partsListBox.Name = "partsListBox";
-            this.partsListBox.Size = new System.Drawing.Size(223, 139);
+            this.partsListBox.Size = new System.Drawing.Size(223, 112);
             this.partsListBox.TabIndex = 16;
             this.partsListBox.SelectedIndexChanged += new System.EventHandler(this.partsListBox_SelectedIndexChanged);
             // 
