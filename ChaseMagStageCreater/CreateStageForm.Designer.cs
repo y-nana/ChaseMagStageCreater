@@ -38,6 +38,7 @@ namespace ChaseMagStageCreater
             this.NormalWallButton = new System.Windows.Forms.RadioButton();
             this.itemBoxButton = new System.Windows.Forms.RadioButton();
             this.poleScaffoldButtom = new System.Windows.Forms.RadioButton();
+            this.clipRadioButton = new System.Windows.Forms.RadioButton();
             this.partsListBox = new System.Windows.Forms.ListBox();
             this.positionX = new System.Windows.Forms.NumericUpDown();
             this.positionY = new System.Windows.Forms.NumericUpDown();
@@ -85,7 +86,6 @@ namespace ChaseMagStageCreater
             this.viewMoveModeButton = new System.Windows.Forms.RadioButton();
             this.mode = new System.Windows.Forms.GroupBox();
             this.partsMoveModeButtom = new System.Windows.Forms.RadioButton();
-            this.clipRadioButton = new System.Windows.Forms.RadioButton();
             this.stagePartsGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.positionX)).BeginInit();
@@ -207,10 +207,20 @@ namespace ChaseMagStageCreater
             this.poleScaffoldButtom.Text = "磁力床";
             this.poleScaffoldButtom.UseVisualStyleBackColor = true;
             // 
+            // clipRadioButton
+            // 
+            this.clipRadioButton.AutoSize = true;
+            this.clipRadioButton.Location = new System.Drawing.Point(3, 235);
+            this.clipRadioButton.Name = "clipRadioButton";
+            this.clipRadioButton.Size = new System.Drawing.Size(109, 31);
+            this.clipRadioButton.TabIndex = 45;
+            this.clipRadioButton.TabStop = true;
+            this.clipRadioButton.Text = "クリップ";
+            this.clipRadioButton.UseVisualStyleBackColor = true;
+            // 
             // partsListBox
             // 
-            this.partsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.partsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.partsListBox.FormattingEnabled = true;
             this.partsListBox.ItemHeight = 27;
             this.partsListBox.Location = new System.Drawing.Point(950, 93);
@@ -435,7 +445,7 @@ namespace ChaseMagStageCreater
             0,
             0,
             0});
-            this.heightSize.ValueChanged += new System.EventHandler(this.Size_ValueChanged);
+            this.heightSize.ValueChanged += new System.EventHandler(this.Size_ValueChanged_Height);
             // 
             // stageSizeGroup
             // 
@@ -493,7 +503,7 @@ namespace ChaseMagStageCreater
             0,
             0,
             0});
-            this.widthSize.ValueChanged += new System.EventHandler(this.Size_ValueChanged);
+            this.widthSize.ValueChanged += new System.EventHandler(this.Size_ValueChanged_Width);
             // 
             // menuStrip1
             // 
@@ -570,14 +580,14 @@ namespace ChaseMagStageCreater
             this.modToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.allDeleteToolStripMenuItem});
             this.modToolStripMenuItem.Name = "modToolStripMenuItem";
-            this.modToolStripMenuItem.Size = new System.Drawing.Size(64, 29);
-            this.modToolStripMenuItem.Text = "編集";
+            this.modToolStripMenuItem.Size = new System.Drawing.Size(83, 29);
+            this.modToolStripMenuItem.Text = "編集(&E)";
             // 
             // allDeleteToolStripMenuItem
             // 
             this.allDeleteToolStripMenuItem.Name = "allDeleteToolStripMenuItem";
-            this.allDeleteToolStripMenuItem.Size = new System.Drawing.Size(193, 34);
-            this.allDeleteToolStripMenuItem.Text = "すべて削除";
+            this.allDeleteToolStripMenuItem.Size = new System.Drawing.Size(216, 34);
+            this.allDeleteToolStripMenuItem.Text = "すべて削除(&D)";
             this.allDeleteToolStripMenuItem.Click += new System.EventHandler(this.AllDeleteToolStripMenuItem_Click);
             // 
             // deleteButton
@@ -653,7 +663,7 @@ namespace ChaseMagStageCreater
             this.stageBox.Location = new System.Drawing.Point(194, 56);
             this.stageBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.stageBox.Name = "stageBox";
-            this.stageBox.Size = new System.Drawing.Size(725, 572);
+            this.stageBox.Size = new System.Drawing.Size(725, 615);
             this.stageBox.TabIndex = 15;
             this.stageBox.TabStop = false;
             // 
@@ -747,17 +757,6 @@ namespace ChaseMagStageCreater
             this.partsMoveModeButtom.TabStop = true;
             this.partsMoveModeButtom.Text = "パーツ移動(E)";
             this.partsMoveModeButtom.UseVisualStyleBackColor = true;
-            // 
-            // clipRadioButton
-            // 
-            this.clipRadioButton.AutoSize = true;
-            this.clipRadioButton.Location = new System.Drawing.Point(3, 235);
-            this.clipRadioButton.Name = "clipRadioButton";
-            this.clipRadioButton.Size = new System.Drawing.Size(109, 31);
-            this.clipRadioButton.TabIndex = 45;
-            this.clipRadioButton.TabStop = true;
-            this.clipRadioButton.Text = "クリップ";
-            this.clipRadioButton.UseVisualStyleBackColor = true;
             // 
             // CreateStageForm
             // 

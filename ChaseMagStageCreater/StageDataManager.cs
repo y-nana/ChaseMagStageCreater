@@ -82,21 +82,27 @@ namespace ChaseMagStageCreater
         {
             this.stageData = data;
             // すべての表示の更新
-            UpdateAllView(controls);
+            UpdateAllView(controls, false);
 
         }
 
         // すべての表示の更新
-        public void UpdateAllView(Control.ControlCollection controls)
+        public void UpdateAllView(Control.ControlCollection controls, bool isZoom)
         {
             foreach (var item in pictures)
             {
                 item.Dispose();
             }
             pictures.Clear();
-            foreach (StagePart part in stageData.stageParts)
+            for (int i = 0; i < stageData.stageParts.Count; i++)
             {
-                AddPictureBox(part, controls);
+                AddPictureBox(stageData.stageParts[i], controls);
+                if (isZoom && !StageOfRangeIn(pictures[i], stage))
+                {
+
+                    pictures[i].Visible = false;
+
+                }
             }
         }
 
@@ -135,9 +141,9 @@ namespace ChaseMagStageCreater
                 addEventAction.Invoke(picture);
             }
             
-            if (!StageOfRangeIn(picture,stage))
+           // if (!StageOfRangeIn(picture,stage))
             {
-                picture.Visible = false;
+                //picture.Visible = false;
 
             }
 
@@ -256,6 +262,24 @@ namespace ChaseMagStageCreater
         // パーツを表示するかどうか
         private bool StageOfRangeIn(PictureBox picture, PictureBox range)
         {
+
+            if (picture.Location.X + picture.Width < range.Location.X)
+            {
+                return false;
+            }
+            if (picture.Location.X > range.Location.X + range.Width)
+            {
+                return false;
+            }
+            if (picture.Location.Y > range.Location.Y + range.Height)
+            {
+                return false;
+            }
+            if (picture.Location.Y + picture.Height < range.Location.Y)
+            {
+                return false;
+            }
+            /*
             if (picture.Location.X < range.Location.X)
             {
                 return false;
@@ -272,6 +296,7 @@ namespace ChaseMagStageCreater
             {
                 return false;
             }
+            */
             return true;
         }
 

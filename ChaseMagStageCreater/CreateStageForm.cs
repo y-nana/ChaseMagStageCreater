@@ -132,9 +132,11 @@ namespace ChaseMagStageCreater
             this.Text = formTitle + "  " + nowOpenPath;
 
             // 描画の更新処理
-            ViewDataClear();
-
             ViewUpdate();
+            ViewDataClear();
+            ChangeStageSize();
+
+     
 
         }
 
@@ -545,6 +547,7 @@ namespace ChaseMagStageCreater
             {
                 return;
             }
+
             zoomManager.ZoomChange(zoomIn);
             Point mouseLocation = PointToClient(MousePosition);
 
@@ -559,12 +562,22 @@ namespace ChaseMagStageCreater
         // ********************************************************
         // ステージのサイズを変更する
         // ********************************************************
-        private void Size_ValueChanged(object sender, EventArgs e)
+        private void Size_ValueChanged_Width(object sender, EventArgs e)
         {
-
             stageDataManager.stageData.width = (float)widthSize.Value;
+
+        }
+        private void Size_ValueChanged_Height(object sender, EventArgs e)
+        {
+            //stageDataManager.stageData.width = (float)widthSize.Value;
             stageDataManager.stageData.height = (float)heightSize.Value;
 
+            ChangeStageSize();
+
+        }
+
+        private void ChangeStageSize()
+        {
             // 縦と横の比率によってどちらを限界まで伸ばすか決める
             if (stageDataManager.stageData.width >= stageDataManager.stageData.height * stageBoxRatio)
             {
@@ -589,8 +602,8 @@ namespace ChaseMagStageCreater
             positionY.Maximum = (decimal)stageDataManager.stageData.height;
 
             PictureViewReflesh();
-
         }
+
 
         // ********************************************************
         // ステージのビューを更新する
@@ -621,7 +634,7 @@ namespace ChaseMagStageCreater
             InStagePicture.Location = stagePictureLocation;
 
             // パーツのピクチャーボックスを再配置
-            stageDataManager.UpdateAllView(this.Controls);
+            stageDataManager.UpdateAllView(this.Controls, zoomManager.isZoomed);
 
             // ステージ表示の端の位置を知らせるラベルの更新
             UpdateCornerLabel();
@@ -714,7 +727,8 @@ namespace ChaseMagStageCreater
             maxStagePictureSize = new Size(stageBox.Size.Width - insideStageMargin * 2, stageBox.Size.Height - insideStageMargin * 2);
             // ステージのピクチャーボックスの縦横比を算出
             stageBoxRatio = maxStagePictureSize.Width / (float)maxStagePictureSize.Height;
-            Size_ValueChanged(sender,e);
+            //Size_ValueChanged_Height(sender,e);
+            ChangeStageSize();
             msgText.Text = "changed";
 
         }
