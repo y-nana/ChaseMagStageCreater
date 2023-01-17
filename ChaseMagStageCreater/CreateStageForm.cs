@@ -6,9 +6,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Unicode;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -132,11 +129,12 @@ namespace ChaseMagStageCreater
             this.Text = formTitle + "  " + nowOpenPath;
 
             // 描画の更新処理
-            ViewUpdate();
+            CreateStageForm_SizeChanged(sender, e);
+            //ChangeStageSize();
             ViewDataClear();
-            ChangeStageSize();
+            ViewUpdate();
 
-     
+
 
         }
 
@@ -565,11 +563,12 @@ namespace ChaseMagStageCreater
         private void Size_ValueChanged_Width(object sender, EventArgs e)
         {
             stageDataManager.stageData.width = (float)widthSize.Value;
+            ChangeStageSize();
+
 
         }
         private void Size_ValueChanged_Height(object sender, EventArgs e)
         {
-            //stageDataManager.stageData.width = (float)widthSize.Value;
             stageDataManager.stageData.height = (float)heightSize.Value;
 
             ChangeStageSize();
@@ -589,17 +588,8 @@ namespace ChaseMagStageCreater
                 stageDataManager.magnification = maxStagePictureSize.Height / stageDataManager.stageData.height;
                 maxStagePictureSize.Width = (int)(stageDataManager.stageData.width * stageDataManager.magnification);
             }
-            InStagePicture.Size = maxStagePictureSize;
-            Point stagePictureLocation = stageBox.Location;
-            stagePictureLocation.Offset((int)(stageBox.Size.Width * 0.5f), (int)(stageBox.Size.Height * 0.5f));
-            stagePictureLocation.Offset(-(int)(maxStagePictureSize.Width * 0.5f), -(int)(maxStagePictureSize.Height * 0.5f));
-            InStagePicture.Location = stagePictureLocation;
+            SettingStageLocation();
             zoomManager.ResetZoom(new Vector2(InStagePicture.Size.Width, InStagePicture.Size.Height));
-
-            // パーツの位置がステージ外へ出ないように
-            positionX.Maximum = (decimal)(stageDataManager.stageData.width * 0.5f);
-            positionX.Minimum = (decimal)(-stageDataManager.stageData.width * 0.5f);
-            positionY.Maximum = (decimal)stageDataManager.stageData.height;
 
             PictureViewReflesh();
         }
@@ -627,11 +617,7 @@ namespace ChaseMagStageCreater
             }
 
             // ステージのピクチャーボックスの大きさを調整
-            InStagePicture.Size = maxStagePictureSize;
-            Point stagePictureLocation = stageBox.Location;
-            stagePictureLocation.Offset((int)(stageBox.Size.Width * 0.5f), (int)(stageBox.Size.Height * 0.5f));
-            stagePictureLocation.Offset(-(int)(maxStagePictureSize.Width * 0.5f), -(int)(maxStagePictureSize.Height * 0.5f));
-            InStagePicture.Location = stagePictureLocation;
+            SettingStageLocation();
 
             // パーツのピクチャーボックスを再配置
             stageDataManager.UpdateAllView(this.Controls, zoomManager.isZoomed);
@@ -640,6 +626,16 @@ namespace ChaseMagStageCreater
             UpdateCornerLabel();
         }
 
+        private void SettingStageLocation()
+        {
+            // ステージのピクチャーボックスの大きさを調整
+            InStagePicture.Size = maxStagePictureSize;
+            Point stagePictureLocation = stageBox.Location;
+            stagePictureLocation.Offset((int)(stageBox.Size.Width * 0.5f), (int)(stageBox.Size.Height * 0.5f));
+            stagePictureLocation.Offset(-(int)(maxStagePictureSize.Width * 0.5f), -(int)(maxStagePictureSize.Height * 0.5f));
+            InStagePicture.Location = stagePictureLocation;
+
+        }
 
         // ステージ表示の端の位置を知らせるラベルの更新
         private void UpdateCornerLabel()
@@ -727,7 +723,6 @@ namespace ChaseMagStageCreater
             maxStagePictureSize = new Size(stageBox.Size.Width - insideStageMargin * 2, stageBox.Size.Height - insideStageMargin * 2);
             // ステージのピクチャーボックスの縦横比を算出
             stageBoxRatio = maxStagePictureSize.Width / (float)maxStagePictureSize.Height;
-            //Size_ValueChanged_Height(sender,e);
             ChangeStageSize();
             msgText.Text = "changed";
 

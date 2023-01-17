@@ -141,11 +141,6 @@ namespace ChaseMagStageCreater
                 addEventAction.Invoke(picture);
             }
             
-           // if (!StageOfRangeIn(picture,stage))
-            {
-                //picture.Visible = false;
-
-            }
 
             // 追加処理
             pictures.Add(picture);
@@ -260,6 +255,7 @@ namespace ChaseMagStageCreater
         //*******************************************************************************************
 
         // パーツを表示するかどうか
+        // 完全に外側だったら表示しない
         private bool StageOfRangeIn(PictureBox picture, PictureBox range)
         {
 
@@ -279,24 +275,7 @@ namespace ChaseMagStageCreater
             {
                 return false;
             }
-            /*
-            if (picture.Location.X < range.Location.X)
-            {
-                return false;
-            }
-            if (picture.Location.X + picture.Width > range.Location.X + range.Width)
-            {
-                return false;
-            }
-            if (picture.Location.Y < range.Location.Y)
-            {
-                return false;
-            }
-            if (picture.Location.Y + picture.Height > range.Location.Y + range.Height)
-            {
-                return false;
-            }
-            */
+
             return true;
         }
 
