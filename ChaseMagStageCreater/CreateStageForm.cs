@@ -352,8 +352,7 @@ namespace ChaseMagStageCreater
                 Point mousePos = PointToClient(MousePosition);
                 int deltaMove = mousePos.X - mouseStartPos.X;
                 zoomManager.SetForcus(deltaMove + startZoomLocation);
-                // 不安定
-                //PictureViewReflesh();
+
             }
         }
 
@@ -485,6 +484,7 @@ namespace ChaseMagStageCreater
             if (partsMoveModeButtom.Checked && e.Button == MouseButtons.Left)
             {
                 dragPictureIndex = index;
+                stageDataManager.ResetPictureSize((PictureBox)sender);
             }
 
 
@@ -498,15 +498,6 @@ namespace ChaseMagStageCreater
                 return;
             }
 
-            Point mouseLocation = PointToClient(MousePosition);
-            // ドラッグでステージ外へ出せないように
-            if (mouseLocation.X < InStagePicture.Location.X ||
-                mouseLocation.X + stageDataManager.pictures[dragPictureIndex].Width * 0.5f > InStagePicture.Location.X + InStagePicture.Size.Width||
-                mouseLocation.Y < InStagePicture.Location.Y || 
-                mouseLocation.Y + stageDataManager.pictures[dragPictureIndex].Height * 0.5f> InStagePicture.Location.Y + InStagePicture.Size.Height)
-            {
-                return;
-            }
 
             PointF picLocation = PointToClient(MousePosition);
             picLocation.X -= stageDataManager.pictures[dragPictureIndex].Width * 0.5f;
@@ -527,6 +518,7 @@ namespace ChaseMagStageCreater
                 // データへ反映する
                 stageDataManager.PictureLocationApply((PictureBox)sender);
                 SetViewPartData(stageDataManager.GetPart((PictureBox)sender));
+                stageDataManager.ResizePartPicture((PictureBox)sender, InStagePicture);
             }
             dragPictureIndex = -1;
 
@@ -570,7 +562,6 @@ namespace ChaseMagStageCreater
         private void Size_ValueChanged_Height(object sender, EventArgs e)
         {
             stageDataManager.stageData.height = (float)heightSize.Value;
-
             ChangeStageSize();
 
         }
@@ -624,6 +615,10 @@ namespace ChaseMagStageCreater
 
             // ステージ表示の端の位置を知らせるラベルの更新
             UpdateCornerLabel();
+            // 選択状況
+            if (IndexOutOfRange()) return;
+
+            stageDataManager.SelectedPicture(partsListBox.SelectedIndex);
         }
 
         private void SettingStageLocation()
@@ -724,7 +719,6 @@ namespace ChaseMagStageCreater
             // ステージのピクチャーボックスの縦横比を算出
             stageBoxRatio = maxStagePictureSize.Width / (float)maxStagePictureSize.Height;
             ChangeStageSize();
-            msgText.Text = "changed";
 
         }
     }
