@@ -219,7 +219,7 @@ namespace ChaseMagStageCreater
             int index = pictures.IndexOf(partPicture);
             PictureBox realPart = GetInStagePicture(pictures[index]);
             Point partLocation = pictures[index].Location;
-            partLocation.Offset(-(realPart.Width-pictures[index].Width), -realPart.Height - pictures[index].Height);
+            partLocation.Offset(-(realPart.Width-pictures[index].Width), -(realPart.Height - pictures[index].Height));
             partLocation.Offset(-(int)zoomManager.zoomLocation, 0);
             // 位置のセット
             stageData.stageParts[index].position = 
