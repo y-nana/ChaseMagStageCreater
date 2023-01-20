@@ -26,27 +26,28 @@ namespace ChaseMagStageCreater
         private PictureBoxDataManager pictureBoxDataManager;
 
         // ステージのピクチャーボックス
-        private PictureBox stage;
+        private PictureBox inStage;
+        private PictureBox zoomStage;
 
         // 倍率
-        public float magnification { get; set; }
+        //public float magnification { get; set; }
+        private StageSizeManager sizeManager;
 
         // ズームマネージャー
-        private ZoomManager zoomManager;
+        //private ZoomManager zoomManager;
 
         // ドラッグイベントを追加するメソッド
         private Action<PictureBox> addEventAction;
 
 
 
-        public StageDataManager(float width, float height, PictureBox stage, ZoomManager zoomManager, Action<PictureBox> addEventAction)
+        public StageDataManager(StageData stageData, PictureBox stage, PictureBox zoomStage, StageSizeManager sizeManager, Action<PictureBox> addEventAction)
         {
-            stageData = new StageData();
-            stageData.width = width;
-            stageData.height = height;
-            this.stage = stage;
-            this.zoomManager = zoomManager;
-
+            this.stageData = stageData;
+            this.inStage = stage;
+            this.zoomStage = zoomStage;
+            this.zoomStage.SizeChanged += ZoomStage_SizeChanged;
+            this.sizeManager = sizeManager;
             pictures = new List<PictureBox>();
             pictureBoxDataManager = new PictureBoxDataManager();
             this.addEventAction = addEventAction;
@@ -54,7 +55,7 @@ namespace ChaseMagStageCreater
         }
 
         // パーツを新しく追加する
-        public void AddNewPart(StagePartsCategory category, Vector2 position, Control.ControlCollection controls)
+        public void AddNewPart(StagePartsCategory category, Vector2 position)
         {
         
             StagePart part = new StagePart();
@@ -62,7 +63,7 @@ namespace ChaseMagStageCreater
             part.position = position;
             part.sizeMagnification = Vector2.one;
             stageData.stageParts.Add(part);
-            AddPictureBox(part,controls);
+            AddPictureBox(part);
             
         }
 
@@ -82,12 +83,12 @@ namespace ChaseMagStageCreater
         {
             this.stageData = data;
             // すべての表示の更新
-            UpdateAllView(controls, false);
+            UpdateAllView();
 
         }
 
         // すべての表示の更新
-        public void UpdateAllView(Control.ControlCollection controls, bool isZoom)
+        public void UpdateAllView()
         {
             foreach (var item in pictures)
             {
@@ -96,17 +97,17 @@ namespace ChaseMagStageCreater
             pictures.Clear();
             for (int i = 0; i < stageData.stageParts.Count; i++)
             {
-                AddPictureBox(stageData.stageParts[i], controls);
-                if (isZoom)
+                AddPictureBox(stageData.stageParts[i]);
+                if (inStage.Size != zoomStage.Size)
                 {
-                    if (!StageOfRangeIn(pictures[i], stage))
+                    if (!StageOfRangeIn(pictures[i], inStage))
                     {
                         pictures[i].Visible = false;
 
                     }
                     else
                     {
-                        ResizePartPicture(pictures[i], stage);
+                        ResizePartPicture(pictures[i], inStage);
                     }
 
                 }
@@ -114,17 +115,19 @@ namespace ChaseMagStageCreater
         }
 
         // パーツに応じた一つのピクチャーボックスを作り追加する
-        private void AddPictureBox(StagePart part, Control.ControlCollection controls)
+        private void AddPictureBox(StagePart part)
         {
             PictureBox picture = new PictureBox();
+            //float magnification = sizeManager.stageDataRatio;
+            float magnification = zoomStage.Width / stageData.width;
             // 大きさの設定
             Vector2 pictureSize = pictureBoxDataManager.GetPictureSize(part.category);
             Size size = new Size((int)Math.Round(pictureSize.x * magnification * part.sizeMagnification.x),
                 (int)Math.Round(pictureSize.y * magnification * part.sizeMagnification.y));
             // 位置の設定
             Point location =
-            LocationConverter.StagePositionToLocation(part.position, size, pictureBoxDataManager.GetBasePoint(part.category), GetBasePoint(stage), magnification);
-            location.Offset((int)(zoomManager.zoomLocation), 0);
+            LocationConverter.StagePositionToLocation(part.position, size, pictureBoxDataManager.GetBasePoint(part.category), GetBasePoint(inStage), magnification);
+            //location.Offset((int)(zoomManager.zoomLocation), 0);
 
             picture.Location = location;
             picture.Size = size;
@@ -151,7 +154,7 @@ namespace ChaseMagStageCreater
 
             // 追加処理
             pictures.Add(picture);
-            controls.Add(picture);
+            inStage.FindForm().Controls.Add(picture);
             picture.BringToFront();
 
         }
@@ -163,7 +166,7 @@ namespace ChaseMagStageCreater
             stageData.stageParts[index].sizeMagnification = value;
 
             StagePart part = stageData.stageParts[index];
-
+            float magnification = sizeManager.stageDataRatio;
             // 大きさの設定
             Vector2 pictureSize = pictureBoxDataManager.GetPictureSize(part.category);
             Size size = new Size((int)Math.Round(pictureSize.x * magnification * part.sizeMagnification.x),
@@ -209,7 +212,7 @@ namespace ChaseMagStageCreater
             if (preIndex >= 0&& preIndex < pictures.Count)
             {
                 pictures[preIndex].Image = null;
-                ResizePartPicture(pictures[preIndex], stage);
+                ResizePartPicture(pictures[preIndex], inStage);
             }
         }
 
@@ -220,14 +223,15 @@ namespace ChaseMagStageCreater
             PictureBox realPart = GetInStagePicture(pictures[index]);
             Point partLocation = pictures[index].Location;
             partLocation.Offset(-(realPart.Width-pictures[index].Width), -(realPart.Height - pictures[index].Height));
-            partLocation.Offset(-(int)zoomManager.zoomLocation, 0);
+            //partLocation.Offset(-(int)zoomManager.zoomLocation, 0);
+            float magnification = sizeManager.stageDataRatio;
             // 位置のセット
             stageData.stageParts[index].position = 
                 LocationConverter.LocationToStagePosition(
                 partLocation,
                 realPart.Size,
                 pictureBoxDataManager.GetBasePoint(stageData.stageParts[index].category),
-                GetBasePoint(stage), magnification);
+                GetBasePoint(zoomStage), magnification);
             SetPicturePosition(index);
             
         }
@@ -235,14 +239,15 @@ namespace ChaseMagStageCreater
         // 指定したインデックスのピクチャーボックスの位置をデータ通りに更新する
         private void SetPicturePosition(int index)
         {
+            float magnification = sizeManager.stageDataRatio;
             Point partLocation =
                 LocationConverter.StagePositionToLocation(
                     stageData.stageParts[index].position,
                     //pictures[index].Size,
                     GetInStagePicture(pictures[index]).Size,
                     pictureBoxDataManager.GetBasePoint(stageData.stageParts[index].category),
-                    GetBasePoint(stage), magnification);
-            partLocation.Offset((int)zoomManager.zoomLocation, 0);
+                    GetBasePoint(zoomStage), magnification);
+            //partLocation.Offset((int)zoomManager.zoomLocation, 0);
             pictures[index].Location = partLocation;
 
         }
@@ -277,7 +282,7 @@ namespace ChaseMagStageCreater
         {
             PictureBox box = new PictureBox();
             StagePart part = GetPart(partPicture);
-
+            float magnification = sizeManager.stageDataRatio;
             Vector2 pictureSize = pictureBoxDataManager.GetPictureSize(part.category);
             Size size = new Size((int)Math.Round(pictureSize.x * magnification * part.sizeMagnification.x),
                 (int)Math.Round(pictureSize.y * magnification * part.sizeMagnification.y));
@@ -288,14 +293,30 @@ namespace ChaseMagStageCreater
                     part.position, 
                     size, 
                     pictureBoxDataManager.GetBasePoint(part.category), 
-                    GetBasePoint(stage),
+                    GetBasePoint(zoomStage),
                     magnification);
-            location.Offset((int)(zoomManager.zoomLocation), 0);
+            //location.Offset((int)(zoomManager.zoomLocation), 0);
             box.Location = location;
             return box;
         }
 
+        // パーツの再配置
+        private void ZoomStage_SizeChanged(object sender, EventArgs e)
+        {
 
+            // ステージのピクチャーボックスの大きさを調整
+            //SettingStageLocation();
+
+            // パーツのピクチャーボックスを再配置
+            UpdateAllView();
+
+            // ステージ表示の端の位置を知らせるラベルの更新
+            //UpdateCornerLabel();
+            // 選択状況
+            //if (IndexOutOfRange()) return;
+
+            //stageDataManager.SelectedPicture(partsListBox.SelectedIndex);
+        }
         //*******************************************************************************************
 
         // パーツを表示するかどうか

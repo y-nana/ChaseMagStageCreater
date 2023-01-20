@@ -95,6 +95,7 @@
     <Compile Include="StageDataManager.cs" />
     <Compile Include="StageData.cs" />
     <Compile Include="StagePart.cs" />
+    <Compile Include="StageSizeManager.cs" />
     <Compile Include="Vector2.cs" />
     <Compile Include="ZoomManager.cs" />
     <EmbeddedResource Include="CreateStageForm.resx">
