@@ -15,17 +15,15 @@ namespace ChaseMagStageCreater
     class StageSizeManager
     {
 
-        private StageData stageData;
-       
+        private StageData stageData;    // ステージデータ
 
-        private PictureBox outStage;
-        private PictureBox inStage;
-        private PictureBox zoomStage;
+        private PictureBox outStage;    // 最大サイズののピクチャーボックス
+        private PictureBox inStage;     // ステージのピクチャーボックス
+        private PictureBox zoomStage;   // ズーム時に大きくなるピクチャーボックス
 
-        public float stageDataRatio { get; private set; }
-        //private Size maxInStageSize;
+        private float stageDataRatio;   // ステージデータとの倍率
 
-        //private readonly int margin = 10;
+        public Label debugLabel;        // デバッグ用
 
         public StageSizeManager(StageData stageData, PictureBox outStage, PictureBox inStage, PictureBox zoomStage)
         {
@@ -36,10 +34,18 @@ namespace ChaseMagStageCreater
             // イベント登録
             this.outStage.SizeChanged += OutStageSizeChanged;
             this.zoomStage.SizeChanged += ZoomStage_SizeChanged;
+            zoomStage.FindForm().SizeChanged += OutStageSizeChanged;
             // サイズ、位置セット
             ChangeStageSize();
         }
 
+        // フォーム自体のサイズ変更など
+        public void OutStageSizeChanged(object sender, EventArgs e)
+        {
+            ChangeStageSize();
+        }
+
+        // ズームに伴うサイズ変更
         private void ZoomStage_SizeChanged(object sender, EventArgs e)
         {
 
@@ -81,8 +87,6 @@ namespace ChaseMagStageCreater
         // データのステージサイズの変更に伴って大きさを変える
         public void ChangeStageSize()
         {
-            // ズームリセットがいるかも
-
 
             // 横をマックスにする
             if (IsWidthMax())
@@ -117,32 +121,18 @@ namespace ChaseMagStageCreater
 
         }
 
-        public void OutStageSizeChanged(object sender, EventArgs e)
-        {
-            ChangeStageSize();
-        }
+
 
         // 横幅をぎりぎりにするか 縦横比率から求める
         private bool IsWidthMax()
         {
-            float outStageAspectRatio = outStage.Width / outStage.Height;
-            float dataStageSizeAspectRatio = stageData.width / stageData.height;
+            float outStageAspectRatio = (float)outStage.Width / outStage.Height;
+            float dataStageSizeAspectRatio = (float)stageData.width / stageData.height;
             return outStageAspectRatio < dataStageSizeAspectRatio;
         }
 
 
 
-        // 最大ズーム倍率を返す
-        public float GetMaxZoom()
-        {
-            
-            if (IsWidthMax())
-            {
-                return outStage.Height / inStage.Height;
-
-            }
-            return outStage.Width / inStage.Height;
-        }
 
     }
 }

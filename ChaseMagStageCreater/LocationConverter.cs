@@ -67,7 +67,7 @@ namespace ChaseMagStageCreater
 
             }
 
-            return LocationToStagePosition(point,stageBaseLocation,magnification);
+            return LocationToStagePositionIncrement(point,stageBaseLocation,magnification);
             /*
             Vector2 deltaMove = new Vector2(point.X - location.X, point.Y - location.Y);
 
@@ -85,6 +85,7 @@ namespace ChaseMagStageCreater
 
 
         // アプリケーション上の座標をUnity内の座標へ変換する
+
         public static Vector2 LocationToStagePosition(Point point, Point stageBaseLocation, float magnification)
         {
             Point location = stageBaseLocation;
@@ -97,13 +98,19 @@ namespace ChaseMagStageCreater
                 deltaMove.x / magnification,
                 deltaMove.y / magnification
                 );
+           return returnValue;
+
+        }
+        public static Vector2 LocationToStagePositionIncrement(Point point, Point stageBaseLocation, float magnification)
+        {
+            // ステージ上のポジションへ変換
+            Vector2 returnValue = LocationToStagePosition(point, stageBaseLocation, magnification);
             // 0.5刻みにする
             float increment = 0.5f;
             returnValue = new Vector2(IncrementOfValue(returnValue.x, increment), -IncrementOfValue(returnValue.y, increment));
             return returnValue;
 
         }
-
         // 指定の値刻みの値を返す
         public static float IncrementOfValue(float value, float increment)
         {

@@ -86,6 +86,7 @@
     <Compile Include="CreateStageForm.Designer.cs">
       <DependentUpon>CreateStageForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GuideViewManager.cs" />
     <Compile Include="JsonManager.cs" />
     <Compile Include="LocationConverter.cs" />
     <Compile Include="PictureBoxData.cs" />

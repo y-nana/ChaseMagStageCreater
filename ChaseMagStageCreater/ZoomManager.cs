@@ -11,34 +11,37 @@ namespace ChaseMagStageCreater
     // ズームを管理するクラス
     public class ZoomManager
     {
-        public float zoomValue { get; private set; }     // 現在何倍か
-        public bool isZoomed { get; private set; }
-        public int zoomLocation { get; private set; }      // どこが中心か
-        //public Size viewStagePictureSize { get; private set; }
-        private Size baseStageSize;
+        private float zoomValue;        // 現在何倍か
+        private bool isZoomed;          // 現在ズームしている状態かどうか
+        private bool isZooming;         // ズームによる処理の実行中か
+        private bool isClicked;         // クリック中か
+        private Size baseStageSize;     // ズーム前のサイズ
 
-        private PictureBox inStage;
-        private PictureBox outStage;
-        private PictureBox zoomStage;
+        private PictureBox inStage;     // ステージのピクチャーボックス
+        private PictureBox outStage;    // 最大サイズのピクチャーボックス
+        private PictureBox zoomStage;   // ズーム時に大きくなるピクチャーボックス
 
-        public float maxZoomValue = 2.0f;
+        private RadioButton moveButtom; // 視点移動モードにするラジオボタン
 
-        private readonly float defaultPercent = 1.0f;
+        private Point startZoomLocation;    // 視点移動し始めのピクチャーボックスの位置
+        private Point startMouseLocation;   // 視点移動し始めのマウスの位置
 
-        private readonly float wheelPercentValue = 0.1f;
+        public float maxZoomValue = 2.0f;   // 最大倍率
 
-        private readonly int moveValue = 40;
+        private readonly float defaultPercent = 1.0f;   // 初期倍率
 
-        //private Control control;
+        private readonly float wheelPercentValue = 0.5f;//１ ホイールによる増加
 
-        public ZoomManager(PictureBox inStage, PictureBox outStage, PictureBox zoomStage)
+        public  Label debugLabel;       // デバッグ用
+
+        public ZoomManager(PictureBox inStage, PictureBox outStage, PictureBox zoomStage, RadioButton moveButtom)
         {
             zoomValue = defaultPercent;
             this.baseStageSize = inStage.Size;
             this.inStage = inStage;
             this.outStage = outStage;
             this.zoomStage = zoomStage;
-            //viewStagePictureSize = baseStageSize;
+            this.moveButtom = moveButtom;
             baseStageSize = inStage.Size;
             this.zoomStage.Location = inStage.Location;
             this.zoomStage.Size = inStage.Size;
@@ -46,6 +49,28 @@ namespace ChaseMagStageCreater
 
             this.inStage.SizeChanged += InStageSizeChanged;
             this.inStage.MouseWheel += InStagePicture_MouseWheel;
+            this.inStage.MouseDown += InStagePicture_Clicked;
+            this.inStage.MouseMove += InStagePicture_MouseMove;
+            this.inStage.MouseUp += InStagePicture_MouseUp;
+            SetMaxZoomValue();
+
+        }
+
+
+        // ********************************************************
+        // ステージの大きさが変更された
+        // ********************************************************
+        public void InStageSizeChanged(object sender, EventArgs e)
+        {
+
+            if (isZooming)
+            {
+                return;
+            }
+
+            baseStageSize = inStage.Size;
+            ResetZoom();
+            SetMaxZoomValue();
         }
 
 
@@ -57,29 +82,85 @@ namespace ChaseMagStageCreater
         private void InStagePicture_MouseWheel(object sender, MouseEventArgs e)
         {
             bool zoomIn = e.Delta > 0;
-            /*
-            if (zoomIn && (!CanZoom()||zoomManager.isZoomed))
+            // マウスの位置のところへフォーカス
+            PointF delta = new PointF(e.Location.X - (inStage.Width * 0.5f), e.Location.Y - (inStage.Height * 0.5f));
+            //if (!ZoomChange(e.Delta))
+            if (!ZoomChange(zoomIn))
             {
                 return;
             }
-            */
-            ZoomChange(zoomIn);
-            Point mouseLocation = e.Location;
-            mouseLocation = inStage.FindForm().PointToClient(mouseLocation);
+
             // マウスの位置のところへフォーカス
-            float delta = mouseLocation.X - (inStage.Location.X + inStage.Width * 0.5f);
-            ChangeFocus(-(int)Math.Round(delta));
-            //PictureViewReflesh();
+
+            delta.X = -delta.X * zoomValue + delta.X;
+            delta.Y = -delta.Y * zoomValue + delta.Y;
+            ChangeFocus(Point.Round(delta));
 
 
         }
 
-        //ズームする
-        public void ZoomChange(int deltaWheel)
+        // ********************************************************
+        // 視点移動
+        // ********************************************************
+
+        private void InStagePicture_Clicked(object sender, MouseEventArgs e)
         {
 
+
+            if (e.Button == MouseButtons.Left && moveButtom.Checked)
+            {
+                // マウスの位置のところへフォーカス
+
+                PointF delta = new PointF( e.Location.X - (inStage.Width * 0.5f), -(e.Location.Y - (inStage.Height* 0.5f)));
+                ChangeFocus(Point.Round(delta));
+            }
+
+            // 右クリックでドラッグによる視点移動を開始
+            if (e.Button == MouseButtons.Right)
+            {
+                isClicked = true;
+                startZoomLocation =zoomStage.Location;
+                startMouseLocation = inStage.FindForm().PointToClient(e.Location);
+            }
+
+
+
+        }
+        // ドラッグ中の処理
+        private void InStagePicture_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isClicked)
+            {
+                Point mousePos = inStage.FindForm().PointToClient(e.Location);
+                mousePos.Offset(-startMouseLocation.X, -startMouseLocation.Y);
+                mousePos.Offset(startZoomLocation);
+                SetForcus(mousePos);
+
+            }
+        }
+        // ドラッグ終了
+        private void InStagePicture_MouseUp(object sender, MouseEventArgs e)
+        {
+            isClicked = false;
+
+        }
+
+        //ズームする ホイールで徐々にバージョン
+        // ちらつきが気になるので未使用
+        public bool ZoomChange(int deltaWheel)
+        {
+
+            if (!isZoomed)
+            {
+                baseStageSize = inStage.Size;
+                
+            }
             if (deltaWheel > 0)
             {
+                if (zoomValue >= maxZoomValue)
+                {
+                    return false;
+                }
                 isZoomed = true;
                 zoomValue += wheelPercentValue;
                 if (zoomValue > maxZoomValue)
@@ -90,6 +171,10 @@ namespace ChaseMagStageCreater
             }
             else if(deltaWheel < 0)
             {
+                if (zoomValue <= defaultPercent)
+                {
+                    return false;
+                }
                 zoomValue -= wheelPercentValue;
                 if (zoomValue < defaultPercent)
                 {
@@ -97,56 +182,70 @@ namespace ChaseMagStageCreater
                     zoomValue = defaultPercent;
                 }
 
-                zoomLocation = 0;
 
             }
-            //ZoomAplly();
+            isZooming = true;
+            Size size = new Size((int)Math.Round(baseStageSize.Width * zoomValue), (int)Math.Round(baseStageSize.Height * zoomValue));
+
+            ChangeZoomStageSize(size);
+
+            isZooming = false;
+            return true;
         }
 
-        //ズームする
-        public void ZoomChange(bool ZoomIn)
+        //ズームする 一気に最大バージョン
+        public bool ZoomChange(bool ZoomIn)
         {
+
+
             if (!isZoomed)
             {
                 baseStageSize = inStage.Size;
             }
             if (ZoomIn)
             {
+
+                if (zoomValue == maxZoomValue)
+                {
+                    return false;
+                }
                 isZoomed = true;
                 zoomValue = maxZoomValue;
 
             }
             else
             {
-                /*
-                isZoomed = false;
-                zoomValue = defaultPercent;
-                zoomLocation = 0.0f;
-                */
+
                 ResetZoom();
             }
+
+            isZooming = true;
             Size size = new Size((int)Math.Round(inStage.Width * zoomValue), (int)Math.Round(inStage.Height * zoomValue));
 
             ChangeZoomStageSize(size);
 
+            isZooming = false;
+            return true;
 
 
-            //ZoomAplly();
         }
 
-
-        public void InStageSizeChanged(object sender, EventArgs e)
+        // ズームをリセットする
+        public void ResetZoom()
         {
-            //ResetZoom();
-            //baseStageSize = inStage.Size;
-            if (isZoomed)
-            {
-                return;
-            }
-            zoomStage.Location = inStage.Location;
-            zoomStage.Size = inStage.Size;
-            float heightRatio = outStage.Height / inStage.Height;
-            float widthRatio = outStage.Width / inStage.Width;
+
+            isZoomed = false;
+            zoomValue = defaultPercent;
+
+            ChangeZoomStageSize(baseStageSize);
+
+        }
+
+        // 最大倍率を算出しなおす
+        private void SetMaxZoomValue()
+        {
+            float heightRatio = (float)outStage.Height / inStage.Height;
+            float widthRatio = (float)outStage.Width / inStage.Width;
 
             if (heightRatio < widthRatio)
             {
@@ -155,99 +254,68 @@ namespace ChaseMagStageCreater
             }
             maxZoomValue = heightRatio;
         }
-        //private void ZoomAplly()
-        //{
-        //viewStagePictureSize = new Vector2(baseStageSize.x * zoomValue, baseStageSize.y * zoomValue);
-        //viewStagePictureSize = new Size(baseStageSize.Width * zoomValue, baseStageSize.Height * zoomValue);
-        //}
 
-        // ズームをリセットする
-        public void ResetZoom()
-        {
-            
-            //baseStageSize = size;
-            zoomLocation = 0;
-
-            isZoomed = false;
-            zoomValue = defaultPercent;
-
-            ChangeZoomStageSize(baseStageSize);
-
-            //ZoomAplly();
-        }
 
         // ズーム中の視点を変更する
-        public void ChangeFocus(bool isRight)
+
+        // 現在からの加算移動
+        public void ChangeFocus(Point value)
         {
             if (!isZoomed)
             {
                 return;
             }
 
-            if (isRight)
-            {
-                ChangeFocus(-moveValue);
-            }
-            else
-            {
-                ChangeFocus(moveValue);
-            }
+            Point location = zoomStage.Location;
+            location.Offset(value.X, value.Y);
 
+            debugLabel.Text = value.ToString();
+            zoomStage.Location = GetInRangeLocation(location);
             
+
         }
 
-        public void ChangeFocus(int value)
+        // 右上のロケーションをそのままセット
+        public void SetForcus(Point value)
         {
             if (!isZoomed)
             {
                 return;
             }
 
-            zoomLocation += value;
-
-            CheckRange();
-            zoomStage.Location.Offset(zoomLocation, 0);
-
-        }
-
-        public void SetForcus(int value)
-        {
-            if (!isZoomed)
-            {
-                return;
-            }
-
-            zoomLocation = value;
-            CheckRange();
-            zoomStage.Location.Offset(zoomLocation, 0);
+            zoomStage.Location = GetInRangeLocation(value);
 
 
         }
-        private void CheckRange()
+
+        // 描画する範囲内のロケーションにして返す
+        private Point GetInRangeLocation(Point location)
         {
-            SizeF viewStagePictureSize = new SizeF(baseStageSize.Width * zoomValue, baseStageSize.Height);
-            // 表示範囲外まで移動しないようにする
-            float maxWidth = (viewStagePictureSize.Width - baseStageSize.Width) *0.5f;
-            if (zoomLocation > maxWidth)
+            
+            if (inStage.Right > location.X + zoomStage.Width)
             {
-                zoomLocation = (int)Math.Round(maxWidth);
+                location.X = inStage.Right - zoomStage.Width;
             }
-            else if (zoomLocation < -maxWidth)
+            if (inStage.Left < location.X)
             {
-                zoomLocation = -(int)Math.Round(maxWidth);
+                location.X = inStage.Left;
 
             }
+            if (inStage.Top < location.Y)
+            {
+                location.Y = inStage.Top;
+            }
+            if (inStage.Bottom > location.Y + zoomStage.Height)
+            {
+                location.Y = inStage.Bottom - zoomStage.Height;
+
+            }
+            return location;
         }
 
-        /*
-        public void ChangeBaseStageSize(Size baseSize, float maxZoom)
-        {
-            this.baseStageSize = baseSize;
-            maxZoomValue = maxZoom;
 
-        }
-        */
 
+        // ズーム後の大きさによって位置を調整して変更する
         private void ChangeZoomStageSize(Size size)
         {
             PointF location = inStage.Location;
@@ -258,12 +326,6 @@ namespace ChaseMagStageCreater
             zoomStage.Location = Point.Round(location);
             zoomStage.Size = size;
         }
-
-
-
-
-
-
 
 
 
