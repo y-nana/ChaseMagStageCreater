@@ -78,19 +78,12 @@ namespace ChaseMagStageCreater
             this.InStageViewPicture = new System.Windows.Forms.PictureBox();
             this.stageBox = new System.Windows.Forms.PictureBox();
             this.playerViewCheckBox = new System.Windows.Forms.CheckBox();
-            this.bottomLeftLabel = new System.Windows.Forms.Label();
-            this.bottomRightLabel = new System.Windows.Forms.Label();
-            this.topRightLabel = new System.Windows.Forms.Label();
-            this.topleftLabel = new System.Windows.Forms.Label();
             this.addModeButtom = new System.Windows.Forms.RadioButton();
             this.viewMoveModeButton = new System.Windows.Forms.RadioButton();
             this.mode = new System.Windows.Forms.GroupBox();
             this.partsMoveModeButtom = new System.Windows.Forms.RadioButton();
             this.maxStagePicture = new System.Windows.Forms.PictureBox();
             this.zoomStagePicture = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.debuglabel2 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.stagePartsGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.positionX)).BeginInit();
@@ -651,7 +644,7 @@ namespace ChaseMagStageCreater
             this.InStageViewPicture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.InStageViewPicture.BackColor = System.Drawing.Color.White;
-            this.InStageViewPicture.Location = new System.Drawing.Point(212, 187);
+            this.InStageViewPicture.Location = new System.Drawing.Point(217, 231);
             this.InStageViewPicture.Name = "InStageViewPicture";
             this.InStageViewPicture.Size = new System.Drawing.Size(700, 280);
             this.InStageViewPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -664,7 +657,7 @@ namespace ChaseMagStageCreater
             this.stageBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.stageBox.BackColor = System.Drawing.SystemColors.GrayText;
-            this.stageBox.Location = new System.Drawing.Point(200, 54);
+            this.stageBox.Location = new System.Drawing.Point(205, 56);
             this.stageBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.stageBox.Name = "stageBox";
             this.stageBox.Size = new System.Drawing.Size(725, 615);
@@ -681,42 +674,6 @@ namespace ChaseMagStageCreater
             this.playerViewCheckBox.Text = "checkBox1";
             this.playerViewCheckBox.UseVisualStyleBackColor = true;
             this.playerViewCheckBox.Visible = false;
-            // 
-            // bottomLeftLabel
-            // 
-            this.bottomLeftLabel.AutoSize = true;
-            this.bottomLeftLabel.Location = new System.Drawing.Point(207, 504);
-            this.bottomLeftLabel.Name = "bottomLeftLabel";
-            this.bottomLeftLabel.Size = new System.Drawing.Size(64, 27);
-            this.bottomLeftLabel.TabIndex = 38;
-            this.bottomLeftLabel.Text = "label1";
-            // 
-            // bottomRightLabel
-            // 
-            this.bottomRightLabel.AutoSize = true;
-            this.bottomRightLabel.Location = new System.Drawing.Point(843, 504);
-            this.bottomRightLabel.Name = "bottomRightLabel";
-            this.bottomRightLabel.Size = new System.Drawing.Size(64, 27);
-            this.bottomRightLabel.TabIndex = 39;
-            this.bottomRightLabel.Text = "label1";
-            // 
-            // topRightLabel
-            // 
-            this.topRightLabel.AutoSize = true;
-            this.topRightLabel.Location = new System.Drawing.Point(843, 187);
-            this.topRightLabel.Name = "topRightLabel";
-            this.topRightLabel.Size = new System.Drawing.Size(64, 27);
-            this.topRightLabel.TabIndex = 40;
-            this.topRightLabel.Text = "label2";
-            // 
-            // topleftLabel
-            // 
-            this.topleftLabel.AutoSize = true;
-            this.topleftLabel.Location = new System.Drawing.Point(207, 187);
-            this.topleftLabel.Name = "topleftLabel";
-            this.topleftLabel.Size = new System.Drawing.Size(64, 27);
-            this.topleftLabel.TabIndex = 41;
-            this.topleftLabel.Text = "label3";
             // 
             // addModeButtom
             // 
@@ -766,8 +723,8 @@ namespace ChaseMagStageCreater
             // 
             this.maxStagePicture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.maxStagePicture.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.maxStagePicture.Location = new System.Drawing.Point(212, 79);
+            this.maxStagePicture.BackColor = System.Drawing.SystemColors.GrayText;
+            this.maxStagePicture.Location = new System.Drawing.Point(217, 86);
             this.maxStagePicture.Name = "maxStagePicture";
             this.maxStagePicture.Size = new System.Drawing.Size(700, 557);
             this.maxStagePicture.TabIndex = 45;
@@ -775,53 +732,19 @@ namespace ChaseMagStageCreater
             // 
             // zoomStagePicture
             // 
-            this.zoomStagePicture.BackColor = System.Drawing.Color.Maroon;
+            this.zoomStagePicture.BackColor = System.Drawing.Color.Transparent;
             this.zoomStagePicture.Location = new System.Drawing.Point(0, 217);
             this.zoomStagePicture.Name = "zoomStagePicture";
             this.zoomStagePicture.Size = new System.Drawing.Size(1200, 280);
             this.zoomStagePicture.TabIndex = 46;
             this.zoomStagePicture.TabStop = false;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(327, 29);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(64, 27);
-            this.label1.TabIndex = 47;
-            this.label1.Text = "label1";
-            // 
-            // debuglabel2
-            // 
-            this.debuglabel2.AutoSize = true;
-            this.debuglabel2.Location = new System.Drawing.Point(608, 29);
-            this.debuglabel2.Name = "debuglabel2";
-            this.debuglabel2.Size = new System.Drawing.Size(64, 27);
-            this.debuglabel2.TabIndex = 48;
-            this.debuglabel2.Text = "label2";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(754, 29);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(64, 27);
-            this.label2.TabIndex = 49;
-            this.label2.Text = "label2";
-            // 
             // CreateStageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 27F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1200, 717);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.debuglabel2);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.InStageViewPicture);
-            this.Controls.Add(this.bottomRightLabel);
-            this.Controls.Add(this.bottomLeftLabel);
-            this.Controls.Add(this.topleftLabel);
-            this.Controls.Add(this.topRightLabel);
             this.Controls.Add(this.maxStagePicture);
             this.Controls.Add(this.mode);
             this.Controls.Add(this.playerViewCheckBox);
@@ -919,10 +842,6 @@ namespace ChaseMagStageCreater
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.PictureBox InStageViewPicture;
         private System.Windows.Forms.CheckBox playerViewCheckBox;
-        private System.Windows.Forms.Label bottomLeftLabel;
-        private System.Windows.Forms.Label bottomRightLabel;
-        private System.Windows.Forms.Label topRightLabel;
-        private System.Windows.Forms.Label topleftLabel;
         private System.Windows.Forms.RadioButton addModeButtom;
         private System.Windows.Forms.RadioButton viewMoveModeButton;
         private System.Windows.Forms.GroupBox mode;
@@ -933,9 +852,6 @@ namespace ChaseMagStageCreater
         private System.Windows.Forms.RadioButton clipRadioButton;
         private System.Windows.Forms.PictureBox maxStagePicture;
         private System.Windows.Forms.PictureBox zoomStagePicture;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label debuglabel2;
-        private System.Windows.Forms.Label label2;
     }
 }
 

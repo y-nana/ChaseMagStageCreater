@@ -15,7 +15,7 @@ namespace ChaseMagStageCreater
     class StageSizeManager
     {
 
-        private StageData stageData;    // ステージデータ
+        private StageDataManager stageDataManager;    // ステージデータ
 
         private PictureBox outStage;    // 最大サイズののピクチャーボックス
         private PictureBox inStage;     // ステージのピクチャーボックス
@@ -23,11 +23,11 @@ namespace ChaseMagStageCreater
 
         private float stageDataRatio;   // ステージデータとの倍率
 
-        public Label debugLabel;        // デバッグ用
+        //public Label debugLabel;        // デバッグ用
 
-        public StageSizeManager(StageData stageData, PictureBox outStage, PictureBox inStage, PictureBox zoomStage)
+        public StageSizeManager(StageDataManager stageDataManager, PictureBox outStage, PictureBox inStage, PictureBox zoomStage)
         {
-            this.stageData = stageData;
+            this.stageDataManager = stageDataManager;
             this.outStage = outStage;
             this.inStage = inStage;
             this.zoomStage = zoomStage;
@@ -92,18 +92,18 @@ namespace ChaseMagStageCreater
             if (IsWidthMax())
             {
                 // 倍率を入れなおす
-                stageDataRatio = outStage.Width / stageData.width;
+                stageDataRatio = outStage.Width / stageDataManager.GetWidth();
 
             }
             // 縦をマックスにする
             else
             {
-                stageDataRatio = outStage.Height / stageData.height;
+                stageDataRatio = outStage.Height / stageDataManager.GetHeight();
 
             }
             Size size = new Size();
-            size.Width = (int)Math.Round(stageDataRatio * stageData.width);
-            size.Height = (int)Math.Round(stageDataRatio * stageData.height);
+            size.Width = (int)Math.Round(stageDataRatio * stageDataManager.GetWidth());
+            size.Height = (int)Math.Round(stageDataRatio * stageDataManager.GetHeight());
 
             // 位置変更
             // 中心を求める
@@ -127,7 +127,7 @@ namespace ChaseMagStageCreater
         private bool IsWidthMax()
         {
             float outStageAspectRatio = (float)outStage.Width / outStage.Height;
-            float dataStageSizeAspectRatio = (float)stageData.width / stageData.height;
+            float dataStageSizeAspectRatio = (float)stageDataManager.GetWidth() / stageDataManager.GetHeight();
             return outStageAspectRatio < dataStageSizeAspectRatio;
         }
 

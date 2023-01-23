@@ -18,9 +18,9 @@ namespace ChaseMagStageCreater
     class StageDataManager
     {
         // 操作しているステージデータ
-        public StageData stageData { get; private set; }
+        private StageData stageData;
         // 表示しているピクチャーボックスのリスト
-        public List<PictureBox> pictures{ get; private set; }
+        private List<PictureBox> pictures;
 
         // サイズなどのデータ取得用
         private PictureBoxDataManager pictureBoxDataManager;
@@ -33,19 +33,26 @@ namespace ChaseMagStageCreater
         private Point deltaMove;
 
         private RadioButton movePartsButtom;
-
+        private StageSizeManager sizeManager;
+        private ZoomManager zoomManager;
+        private GuideViewManager guideManager;
         private readonly int changeDelta = 20;
+
+        private readonly Vector2 defaultSize = new Vector2(80, 20);
+        // ステージサイズの初期値
 
         private int dragPictureIndex;
 
         // 選択状況を変更する処理
         private Action<int> changeSelect;
 
-        public Label debugLabel;
+        //public Label debugLabel;
 
-        public StageDataManager(StageData stageData, PictureBox stage, PictureBox zoomStage, Action<int> changeSelect, RadioButton movePartsButtom)
+        public StageDataManager(PictureBox maxStage, PictureBox stage, PictureBox zoomStage, Action<int> changeSelect, RadioButton movePartsButtom, RadioButton viewMoveButtom)
         {
-            this.stageData = stageData;
+            this.stageData = new StageData();
+            stageData.width = defaultSize.x;
+            stageData.height = defaultSize.y;
             this.inStage = stage;
             this.zoomStage = zoomStage;
             this.zoomStage.SizeChanged += ZoomStage_SizeChanged;
@@ -60,7 +67,13 @@ namespace ChaseMagStageCreater
 
             dragPictureIndex = -1;
             this.movePartsButtom = movePartsButtom;
+
+
+            zoomManager = new ZoomManager(stage, maxStage, zoomStage, viewMoveButtom);
+            sizeManager = new StageSizeManager(this, maxStage, inStage, zoomStage);
+            guideManager = new GuideViewManager(stage, zoomStage, this);
         }
+
 
         private void InStage_MouseUP(object sender, MouseEventArgs e)
         {
@@ -85,7 +98,7 @@ namespace ChaseMagStageCreater
            
             if (Math.Abs(deltaMove.X) > changeDelta || Math.Abs(deltaMove.Y) > changeDelta)
             {
-                debugLabel.Text = delta.X.ToString();
+                //debugLabel.Text = delta.X.ToString();
                 UpdateAllParts();
                 deltaMove = Point.Empty;
             }
@@ -141,13 +154,29 @@ namespace ChaseMagStageCreater
 
         }
 
-
+        /*
         // インポート時などステージデータを丸ごと入れ替える
-        public void SetNewData(StageData data, Control.ControlCollection controls)
+        public void SetNewData(StageData data)
         {
             this.stageData = data;
             // すべての表示の更新
             UpdateAllView();
+
+        }
+        */
+
+        public void ImportData(string path)
+        {
+            this.stageData = JsonManager.ImportData(path);
+            // すべての表示の更新
+            sizeManager.ChangeStageSize();
+            UpdateAllView();
+
+        }
+        public void ExportData(string path)
+        {
+
+            JsonManager.ExportData(path, stageData);
 
         }
 
@@ -311,6 +340,29 @@ namespace ChaseMagStageCreater
 
         }
 
+
+        public void GetStageData(out StageData stageData)
+        {
+            stageData = new StageData(this.stageData);
+            //stageData = this.stageData;
+        }
+
+        public float GetWidth()
+        {
+            return stageData.width;
+        }
+        public float GetHeight()
+        {
+            return stageData.height;
+        }
+
+        public void SetStageSize(float width, float height)
+        {
+            stageData.width = width;
+            stageData.height = height;
+            sizeManager.ChangeStageSize();
+        }
+
         // パーツの取得
         public StagePart GetPart(int index)
         {
@@ -326,6 +378,11 @@ namespace ChaseMagStageCreater
         public int GetPartsCouont()
         {
             return stageData.stageParts.Count;
+        }
+
+        public int IndexOf(StagePart part)
+        {
+            return stageData.stageParts.IndexOf(part);
         }
 
         private void ResetPictureSize(PictureBox partPicture)

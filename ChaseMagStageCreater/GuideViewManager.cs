@@ -19,9 +19,12 @@ namespace ChaseMagStageCreater
         private PictureBox inStage;
         private PictureBox zoomStage;
 
-        private StageData stageData;
+        private StageDataManager stageDataManager;
 
-        public GuideViewManager(Label topleftLabel, Label topRightLabel, Label bottomLeftLabel, Label bottomRightLabel, PictureBox inStage, PictureBox zoomStage, StageData stageData)
+        private readonly int viewNum = 1;
+
+
+        public GuideViewManager(Label topleftLabel, Label topRightLabel, Label bottomLeftLabel, Label bottomRightLabel, PictureBox inStage, PictureBox zoomStage, StageDataManager stageDataManager)
         {
             this.topleftLabel = topleftLabel;
             this.topRightLabel = topRightLabel;
@@ -29,12 +32,49 @@ namespace ChaseMagStageCreater
             this.bottomRightLabel = bottomRightLabel;
             this.inStage = inStage;
             this.zoomStage = zoomStage;
-            this.stageData = stageData;
+            this.stageDataManager = stageDataManager;
 
             this.inStage.SizeChanged += InStage_SizeChanged;
             this.zoomStage.LocationChanged += ZoomStage_LocationChanged;
             UpdateCornerLabel();
         }
+        public GuideViewManager(PictureBox inStage, PictureBox zoomStage, StageDataManager stageDataManager)
+        {
+
+            this.inStage = inStage;
+            this.zoomStage = zoomStage;
+            this.stageDataManager = stageDataManager;
+
+            CreateLabel();
+
+            this.inStage.SizeChanged += InStage_SizeChanged;
+            this.zoomStage.LocationChanged += ZoomStage_LocationChanged;
+            UpdateCornerLabel();
+        }
+
+        private void CreateLabel()
+        {
+            this.topleftLabel = new Label();
+            this.topRightLabel = new Label();
+            this.bottomLeftLabel = new Label();
+            this.bottomRightLabel = new Label();
+
+            inStage.FindForm().Controls.Add(topleftLabel);
+            inStage.FindForm().Controls.Add(topRightLabel);
+            inStage.FindForm().Controls.Add(bottomLeftLabel);
+            inStage.FindForm().Controls.Add(bottomRightLabel);
+
+            this.topleftLabel.BringToFront();
+            this.topRightLabel.BringToFront();
+            this.bottomLeftLabel.BringToFront();
+            this.bottomRightLabel.BringToFront();
+            this.topleftLabel.AutoSize = true;
+            this.topRightLabel.AutoSize = true;
+            this.bottomLeftLabel.AutoSize = true;
+            this.bottomRightLabel.AutoSize = true;
+
+        }
+
 
         private void ZoomStage_LocationChanged(object sender, EventArgs e)
         {
@@ -48,8 +88,9 @@ namespace ChaseMagStageCreater
 
         private void UpdateLabelValue()
         {
+
             // 端のステージの位置
-            float magnification = zoomStage.Width / stageData.width;
+            float magnification = zoomStage.Width / stageDataManager.GetWidth();
             int right = inStage.Right;
             int left = inStage.Left;
             int top = inStage.Top;
@@ -66,6 +107,10 @@ namespace ChaseMagStageCreater
                 basePoint,
                 magnification);
 
+            topLeft.x = (float)Math.Round(topLeft.x, viewNum);
+            topLeft.y = (float)Math.Round(topLeft.y, viewNum);
+            bottomRight.x = (float)Math.Round(bottomRight.x, viewNum);
+            bottomRight.y = (float)Math.Round(bottomRight.y, viewNum);
 
             topleftLabel.Text = topLeft.x.ToString() + ", " + (-topLeft.y).ToString();
             topRightLabel.Text = bottomRight.x.ToString() + ", " + (-topLeft.y).ToString();

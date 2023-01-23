@@ -18,10 +18,10 @@ namespace ChaseMagStageCreater
         private Dictionary<RadioButton, StagePartsCategory> categoryPairs;
 
         // 管理クラス
-        private ZoomManager zoomManager;            // ズームを管理
+        //private ZoomManager zoomManager;            // ズームを管理
         private StageDataManager stageDataManager;  // ステージデータと対応するピクチャーボックスを管理
-        private StageSizeManager sizeManager;       // ステージのピクチャーボックスを管理するクラス
-        private GuideViewManager guideManager;       // ステージのピクチャーボックスを管理するクラス
+        //private StageSizeManager sizeManager;       // ステージのピクチャーボックスを管理するクラス
+        //private GuideViewManager guideManager;       // ステージのピクチャーボックスを管理するクラス
 
         private int preIndex;                       // 前に選択していたインデックス
 
@@ -30,7 +30,7 @@ namespace ChaseMagStageCreater
         private bool noModFrag;
 
 
-        private readonly Vector2 defaultSize = new Vector2(80,20);
+        //private readonly Vector2 defaultSize = new Vector2(80,20);
         // ステージサイズの初期値
 
         private readonly string formTitle = "ChaseMag StageCreater";
@@ -46,13 +46,14 @@ namespace ChaseMagStageCreater
             this.Text = formTitle;
 
             // 必要なクラスの生成
+            /*
             StageData stageData = new StageData();
             stageData.width = defaultSize.x;
             stageData.height = defaultSize.y;
-
+            
             sizeManager = new StageSizeManager(stageData, maxStagePicture, InStageViewPicture, zoomStagePicture);
             zoomManager = new ZoomManager(InStageViewPicture, maxStagePicture, zoomStagePicture, viewMoveModeButton);
-            stageDataManager = new StageDataManager(stageData, InStageViewPicture, zoomStagePicture,ChangeSelect, partsMoveModeButtom);
+            stageDataManager = new StageDataManager(InStageViewPicture, zoomStagePicture,ChangeSelect, partsMoveModeButtom);
             guideManager = new GuideViewManager(
                 topleftLabel,
                 topRightLabel,
@@ -61,10 +62,11 @@ namespace ChaseMagStageCreater
                 InStageViewPicture,
                 zoomStagePicture,
                 stageData);
-            zoomManager.debugLabel = debuglabel2;
-            stageDataManager.debugLabel = label1;
-            sizeManager.debugLabel = label2;
-
+            */
+            //zoomManager.debugLabel = debuglabel2;
+            //stageDataManager.debugLabel = label1;
+            //sizeManager.debugLabel = label2;
+            stageDataManager = new StageDataManager( maxStagePicture,InStageViewPicture, zoomStagePicture, ChangeSelect, partsMoveModeButtom, viewMoveModeButton);
 
             // ラジオボタンとカテゴリーの関連付け
             categoryPairs = new Dictionary<RadioButton, StagePartsCategory>();
@@ -77,8 +79,8 @@ namespace ChaseMagStageCreater
             addModeButtom.Checked = true;
 
             // 表示の初期化
-            widthSize.Value = (decimal)defaultSize.x;
-            heightSize.Value = (decimal)defaultSize.y;
+            widthSize.Value = (decimal)stageDataManager.GetWidth();
+            heightSize.Value = (decimal)stageDataManager.GetHeight();
 
             nowOpenPath = string.Empty;
             msgText.Text = string.Empty;
@@ -123,16 +125,16 @@ namespace ChaseMagStageCreater
         {
 
 
-            StageData data = JsonManager.ImportData(openFileDialog1.FileName);
+            stageDataManager.ImportData(openFileDialog1.FileName);
 
-            stageDataManager.SetNewData(data, this.Controls);
+            //stageDataManager.SetNewData(data, this.Controls);
 
             msgText.Text = openFileDialog1.FileName + "読み込みました";
             nowOpenPath = openFileDialog1.FileName;
             this.Text = formTitle + "  " + nowOpenPath;
 
             // 描画の更新処理
-            sizeManager.ChangeStageSize();
+            //sizeManager.ChangeStageSize();
             ViewDataClear();
             ViewUpdate();
 
@@ -144,7 +146,7 @@ namespace ChaseMagStageCreater
         // 上書き保存を選択
         private void OverWriteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (stageDataManager.stageData.stageParts.Count <= 0)
+            if (stageDataManager.GetPartsCouont() <= 0)
             {
 
                 msgText.Text = "リストにデータを入れてください";
@@ -158,8 +160,10 @@ namespace ChaseMagStageCreater
                 return;
 
             }
-
-            JsonManager.ExportData(nowOpenPath,stageDataManager.stageData);
+            //StageData exportData;
+            //stageDataManager.GetStageData(out exportData);
+            //JsonManager.ExportData(nowOpenPath,exportData);
+            stageDataManager.ExportData(nowOpenPath);
             msgText.Text = nowOpenPath + "保存しました";
             this.Text = formTitle + "  " + nowOpenPath;
 
@@ -168,7 +172,10 @@ namespace ChaseMagStageCreater
         // jsonファイルへ出力
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            JsonManager.ExportData(saveFileDialog1.FileName, stageDataManager.stageData);
+            //StageData exportData;
+            //stageDataManager.GetStageData(out exportData);
+            //JsonManager.ExportData(nowOpenPath,exportData);
+            stageDataManager.ExportData(nowOpenPath);
             nowOpenPath = saveFileDialog1.FileName;
             msgText.Text = nowOpenPath + "保存しました";
             this.Text = formTitle + "  " + nowOpenPath;
@@ -226,7 +233,7 @@ namespace ChaseMagStageCreater
         private void SetViewPartData(StagePart part)
         {
             noModFrag = true;
-            partsListBox.SelectedIndex = stageDataManager.stageData.stageParts.IndexOf(part);
+            partsListBox.SelectedIndex = stageDataManager.IndexOf(part);
             positionX.Value = (decimal)part.position.x;
             positionY.Value = (decimal)part.position.y;
             sizeX.Value = (decimal)part.sizeMagnification.x;
@@ -315,7 +322,7 @@ namespace ChaseMagStageCreater
                 if (addModeButtom.Checked)
                 {
                     // 位置の調整
-                    float magnification = zoomStagePicture.Width / stageDataManager.stageData.width;
+                    float magnification = zoomStagePicture.Width / stageDataManager.GetWidth();
                     Point baseLocation = StageDataManager.GetBasePoint(zoomStagePicture);
 
                     AddStageParts(
@@ -438,15 +445,18 @@ namespace ChaseMagStageCreater
         // ********************************************************
         private void Size_ValueChanged_Width(object sender, EventArgs e)
         {
-            stageDataManager.stageData.width = (float)widthSize.Value;
-            sizeManager.ChangeStageSize();
+            //stageDataManager.stageData.width = (float)widthSize.Value;
+            stageDataManager.SetStageSize((float)widthSize.Value, stageDataManager.GetHeight());
+
+            //sizeManager.ChangeStageSize();
 
 
         }
         private void Size_ValueChanged_Height(object sender, EventArgs e)
         {
-            stageDataManager.stageData.height = (float)heightSize.Value;
-            sizeManager.ChangeStageSize();
+            //stageDataManager.stageData.height = (float)heightSize.Value;
+            stageDataManager.SetStageSize(stageDataManager.GetWidth(), (float)heightSize.Value);
+            //sizeManager.ChangeStageSize();
 
         }
 

@@ -32,7 +32,7 @@ namespace ChaseMagStageCreater
 
         private readonly float wheelPercentValue = 0.5f;//１ ホイールによる増加
 
-        public  Label debugLabel;       // デバッグ用
+        //public  Label debugLabel;       // デバッグ用
 
         public ZoomManager(PictureBox inStage, PictureBox outStage, PictureBox zoomStage, RadioButton moveButtom)
         {
@@ -269,7 +269,7 @@ namespace ChaseMagStageCreater
             Point location = zoomStage.Location;
             location.Offset(value.X, value.Y);
 
-            debugLabel.Text = value.ToString();
+            //debugLabel.Text = value.ToString();
             zoomStage.Location = GetInRangeLocation(location);
             
 

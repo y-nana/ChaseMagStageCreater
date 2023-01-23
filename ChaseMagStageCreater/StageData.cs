@@ -15,6 +15,20 @@ namespace ChaseMagStageCreater
         public float width { get; set; }
         public float height { get; set; }
 
+        public StageData() { }
+
+        public StageData(float width, float height)
+        {
+            this.width = width;
+            this.height = height;
+        }
+        public StageData(StageData stageData)
+        {
+            stageParts = new List<StagePart>(stageData.stageParts);
+            width = stageData.width;
+            height = stageData.height;
+        }
+
         
     }
 
